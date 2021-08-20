@@ -20,7 +20,7 @@ class Software(models.Model):
     name            = models.CharField(max_length=200, unique=True, verbose_name='Software Name')
     slug            = models.SlugField(unique=True, null=True)
     status          = models.BooleanField(default=False, verbose_name='Active')
-    version         = models.CharField(max_length=200, unique=True, verbose_name='Software Version')
+    version         = models.CharField(max_length=200, verbose_name='Software Version', null=True)
     publisher       = models.ForeignKey(Publisher, on_delete=models.CASCADE)
 
     class Meta:
