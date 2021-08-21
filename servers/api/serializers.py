@@ -178,6 +178,7 @@ class ServerCreateUpdateSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'status', 
+            'software', 
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
