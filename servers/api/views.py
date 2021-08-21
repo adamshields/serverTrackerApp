@@ -38,6 +38,7 @@ def server_software_publisher_api_home(request, format=None):
         }
     )
 
+# Begin API Views ------------------------------------
 
 class PublisherCreateAPIView(CreateAPIView):
     queryset = Publisher.objects.all()
@@ -69,9 +70,7 @@ class SoftwareDetailAPIView(RetrieveAPIView):
 class SoftwareListAPIView(ListAPIView):
     queryset = Software.objects.all()
     serializer_class = SoftwareListSerializer
-
-
-# Begin API Views ------------------------------------
+    lookup_field = "slug"
 
 
 class ServerCreateAPIView(CreateAPIView):
@@ -88,7 +87,7 @@ class ServerDetailAPIView(RetrieveAPIView):
 class ServerListAPIView(ListAPIView):
     queryset = Server.objects.all()
     serializer_class = ServerListSerializer
-
+    lookup_field = "slug"
 
 # End API Views ------------------------------------
 

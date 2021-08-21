@@ -89,8 +89,6 @@ class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
 
         model = Software
         fields = [
-            'id',
-            'id',
             'name',
             'status',
             'version',
@@ -111,8 +109,8 @@ class SoftwareDetailSerializer(serializers.ModelSerializer):
         fields = [
             # 'url',
             'id',
-            'id',
             'name',
+            'slug',
             'status',
             'version',
             ]
@@ -132,7 +130,7 @@ class SoftwareListSerializer(serializers.ModelSerializer):
         fields = [
             # 'url',
             'id',
-            'id',
+            'slug',
             'name',
             'status',
             'version',
@@ -154,6 +152,7 @@ class SoftwareSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'id',
             'name',
+            'slug',
             'status',
             'version',
 
