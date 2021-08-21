@@ -15,6 +15,10 @@ class Publisher(models.Model):
 
     def __str__(self):
         return self.name
+        
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Publisher, self).save(*args, **kwargs)
 
 class Software(models.Model):
     name            = models.CharField(max_length=200, unique=True, verbose_name='Software Name')
