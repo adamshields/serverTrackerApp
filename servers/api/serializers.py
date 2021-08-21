@@ -27,15 +27,16 @@ class PublisherCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class PublisherDetailSerializer(serializers.ModelSerializer):
-
+    url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='slug')
     class Meta:
 
         model = Publisher
         fields = [
-            # 'url',
+            'url',
             'id',
             'name',
-            'status', 
+            'status',
+            'software_set', # Reversed
             ]
         lookup_field = 'slug'
         # extra_kwargs = {
@@ -43,18 +44,20 @@ class PublisherDetailSerializer(serializers.ModelSerializer):
         #     # 'name': {'validators': []},
         #     # 'slug': {'validators': []}
         # }
+        depth = 1
 
 
 class PublisherListSerializer(serializers.ModelSerializer):
-
+    url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='slug')
     class Meta:
 
         model = Publisher
         fields = [
-            # 'url',
+            'url',
             'id',
             'name',
             'status', 
+            'software_set', # Reversed
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -62,6 +65,7 @@ class PublisherListSerializer(serializers.ModelSerializer):
         #     # 'name': {'validators': []},
         #     # 'slug': {'validators': []}
         # }
+        depth = 1
 
 
 class PublisherSerializer(serializers.HyperlinkedModelSerializer):
@@ -102,12 +106,12 @@ class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class SoftwareDetailSerializer(serializers.ModelSerializer):
-
+    url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='slug')
     class Meta:
 
         model = Software
         fields = [
-            # 'url',
+            'url',
             'id',
             'name',
             'slug',
@@ -123,12 +127,12 @@ class SoftwareDetailSerializer(serializers.ModelSerializer):
 
 
 class SoftwareListSerializer(serializers.ModelSerializer):
-
+    url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='slug')
     class Meta:
 
         model = Software
         fields = [
-            # 'url',
+            'url',
             'id',
             'slug',
             'name',
@@ -189,12 +193,12 @@ class ServerCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class ServerDetailSerializer(serializers.ModelSerializer):
-
+    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
     class Meta:
 
         model = Server
         fields = [
-            # 'url',
+            'url',
             'id',
             'name',
             'status', 
@@ -208,12 +212,12 @@ class ServerDetailSerializer(serializers.ModelSerializer):
 
 
 class ServerListSerializer(serializers.ModelSerializer):
-    
+    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
     class Meta:
 
         model = Server
         fields = [
-            # 'url',
+            'url',
             'id',
             'name',
             'status', 
