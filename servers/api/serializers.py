@@ -6,9 +6,25 @@ from drf_writable_nested.serializers import *
 from django.utils.text import slugify
 
 
+# """
+# Test Code
+# from servers.api.serializers import PublisherCreateUpdateSerializer
+# serializer = PublisherCreateUpdateSerializer()
+# print(repr(serializer))
+# """
+
+
+
+
 # Begin Publisher ------------------------------------
 
 class PublisherCreateUpdateSerializer(serializers.ModelSerializer):
+    """
+    Test Code
+    from servers.api.serializers import PublisherCreateUpdateSerializer
+    serializer = PublisherCreateUpdateSerializer()
+    print(repr(serializer))
+    """
 
     class Meta:
 
@@ -28,6 +44,13 @@ class PublisherCreateUpdateSerializer(serializers.ModelSerializer):
 
 class PublisherDetailSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='slug')
+    """
+    Test Code
+    from servers.api.serializers import PublisherDetailSerializer
+    serializer = PublisherDetailSerializer()
+    print(repr(serializer))
+    """
+
     class Meta:
 
         model = Publisher
@@ -49,6 +72,13 @@ class PublisherDetailSerializer(serializers.ModelSerializer):
 
 class PublisherListSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='slug')
+    """
+    Test Code
+    from servers.api.serializers import PublisherListSerializer
+    serializer = PublisherListSerializer()
+    print(repr(serializer))
+    """
+
     class Meta:
 
         model = Publisher
@@ -69,7 +99,12 @@ class PublisherListSerializer(serializers.ModelSerializer):
 
 
 class PublisherSerializer(serializers.HyperlinkedModelSerializer):
-
+    """
+    Test Code
+    from servers.api.serializers import PublisherSerializer
+    serializer = PublisherSerializer()
+    print(repr(serializer))
+    """
     class Meta:
         model = Publisher
         fields = [
@@ -87,7 +122,13 @@ class PublisherSerializer(serializers.HyperlinkedModelSerializer):
 
 # Begin Software ------------------------------------
 
-class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
+class SoftwareCreateUpdateCustomSerializer(serializers.Serializer):
+    """
+    Test Code
+    from servers.api.serializers import SoftwareCreateUpdateCustomSerializer
+    serializer = SoftwareCreateUpdateCustomSerializer()
+    print(repr(serializer))
+    """
 
     class Meta:
 
@@ -96,6 +137,7 @@ class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
             'name',
             'status',
             'version',
+            'publisher',
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -105,8 +147,44 @@ class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
         # }
 
 
+
+
+
+
+
+class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
+    """
+    Test Code
+    from servers.api.serializers import SoftwareCreateUpdateSerializer
+    serializer = SoftwareCreateUpdateSerializer()
+    print(repr(serializer))
+    """
+    class Meta:
+
+        model = Software
+        fields = [
+            'name',
+            'status',
+            'version',
+            'publisher',
+            ]
+        # lookup_field = 'slug'
+        # extra_kwargs = {
+        #     'url': {'lookup_field': 'slug'},
+        #     # 'name': {'validators': []},
+        #     # 'slug': {'validators': []}
+        # }
+
+
+
 class SoftwareDetailSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='slug')
+    """
+    Test Code
+    from servers.api.serializers import SoftwareDetailSerializer
+    serializer = SoftwareDetailSerializer()
+    print(repr(serializer))
+    """
     class Meta:
 
         model = Software
@@ -128,6 +206,12 @@ class SoftwareDetailSerializer(serializers.ModelSerializer):
 
 class SoftwareListSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='slug')
+    """
+    Test Code
+    from servers.api.serializers import SoftwareListSerializer
+    serializer = SoftwareListSerializer()
+    print(repr(serializer))
+    """
     class Meta:
 
         model = Software
@@ -149,6 +233,12 @@ class SoftwareListSerializer(serializers.ModelSerializer):
 
 
 class SoftwareSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Test Code
+    from servers.api.serializers import SoftwareSerializer
+    serializer = SoftwareSerializer()
+    print(repr(serializer))
+    """
 
     class Meta:
         model = Software
@@ -174,6 +264,12 @@ class SoftwareSerializer(serializers.HyperlinkedModelSerializer):
 
 # WritableNestedModelSerializer
 class ServerCreateUpdateSerializer(serializers.ModelSerializer):
+    """
+    Test Code
+    from servers.api.serializers import ServerCreateUpdateSerializer
+    serializer = ServerCreateUpdateSerializer()
+    print(repr(serializer))
+    """
 
     class Meta:
 
@@ -194,6 +290,12 @@ class ServerCreateUpdateSerializer(serializers.ModelSerializer):
 
 class ServerDetailSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
+    """
+    Test Code
+    from servers.api.serializers import ServerDetailSerializer
+    serializer = ServerDetailSerializer()
+    print(repr(serializer))
+    """
     class Meta:
 
         model = Server
@@ -214,6 +316,12 @@ class ServerDetailSerializer(serializers.ModelSerializer):
 
 class ServerListSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
+    """
+    Test Code
+    from servers.api.serializers import ServerListSerializer
+    serializer = ServerListSerializer()
+    print(repr(serializer))
+    """
     class Meta:
 
         model = Server
@@ -233,7 +341,12 @@ class ServerListSerializer(serializers.ModelSerializer):
         depth = 2
 
 class ServerSerializer(serializers.HyperlinkedModelSerializer):
-
+    """
+    Test Code
+    from servers.api.serializers import ServerSerializer
+    serializer = ServerSerializer()
+    print(repr(serializer))
+    """
     class Meta:
 
         model = Server
