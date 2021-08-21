@@ -202,6 +202,7 @@ class ServerDetailSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'status', 
+            'software', 
             ]
         lookup_field = 'slug'
         # extra_kwargs = {
@@ -209,7 +210,7 @@ class ServerDetailSerializer(serializers.ModelSerializer):
         #     # 'name': {'validators': []},
         #     # 'slug': {'validators': []}
         # }
-
+        depth = 1
 
 class ServerListSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
