@@ -207,7 +207,7 @@ class ServerDetailSerializer(serializers.ModelSerializer):
 
 
 class ServerListSerializer(serializers.ModelSerializer):
-
+    
     class Meta:
 
         model = Server
@@ -216,6 +216,7 @@ class ServerListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'status', 
+            'software', 
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -223,7 +224,7 @@ class ServerListSerializer(serializers.ModelSerializer):
         #     # 'name': {'validators': []},
         #     # 'slug': {'validators': []}
         # }
-
+        depth = 2
 
 class ServerSerializer(serializers.HyperlinkedModelSerializer):
 

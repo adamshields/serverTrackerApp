@@ -54,6 +54,7 @@ class PublisherDetailAPIView(RetrieveAPIView):
 class PublisherListAPIView(ListAPIView):
     queryset = Publisher.objects.all()
     serializer_class = PublisherListSerializer
+    lookup_field = "slug"
 
 
 class SoftwareCreateAPIView(CreateAPIView):
