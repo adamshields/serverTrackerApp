@@ -28,7 +28,7 @@ router.register(r"servers", ServerViewSet)
 
 
 urlpatterns = [
-    path("views/", include(router.urls)),
+    path("api1/", include(router.urls)),
     path('', server_software_publisher_api_home),
     # Server
     path("server/", ServerListAPIView.as_view(), name="server_list_api"),
