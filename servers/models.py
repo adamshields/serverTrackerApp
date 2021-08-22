@@ -66,8 +66,3 @@ class Server(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Server, self).save(*args, **kwargs)
-
-
-        """
-
-        """
