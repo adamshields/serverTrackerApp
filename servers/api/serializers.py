@@ -1,7 +1,7 @@
 from rest_framework import serializers, request
 from rest_framework.reverse import reverse
 from servers.models import Server, Software, Publisher
-from drf_writable_nested.serializers import *
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 from django.utils.text import slugify
 
@@ -97,27 +97,6 @@ class PublisherListSerializer(serializers.ModelSerializer):
         # }
         depth = 1
 
-
-class PublisherSerializer(serializers.HyperlinkedModelSerializer):
-    """
-    Test Code
-    from servers.api.serializers import PublisherSerializer
-    serializer = PublisherSerializer()
-    print(repr(serializer))
-    """
-    class Meta:
-        model = Publisher
-        fields = [
-            'url',
-            'id',
-            'name',
-            'status',
-            ]
-        lookup_field = 'slug'
-        extra_kwargs = {
-            'url': {'lookup_field': 'slug'},
-            # 'name': {'validators': []},
-        }
 # End Publisher ------------------------------------
 
 # Begin Software ------------------------------------
@@ -229,34 +208,6 @@ class SoftwareListSerializer(serializers.ModelSerializer):
         #     # 'name': {'validators': []},
         #     # 'slug': {'validators': []}
         # }
-
-
-
-class SoftwareSerializer(serializers.HyperlinkedModelSerializer):
-    """
-    Test Code
-    from servers.api.serializers import SoftwareSerializer
-    serializer = SoftwareSerializer()
-    print(repr(serializer))
-    """
-
-    class Meta:
-        model = Software
-        fields = [
-            'url',
-            'id',
-            'name',
-            'slug',
-            'status',
-            'version',
-
-            ]
-        lookup_field = 'slug'
-        extra_kwargs = {
-            'url': {'lookup_field': 'slug'},
-            # 'name': {'validators': []},
-        }
-
 # End Software ------------------------------------
 
 
@@ -340,7 +291,77 @@ class ServerListSerializer(serializers.ModelSerializer):
         # }
         depth = 2
 
-class ServerSerializer(serializers.HyperlinkedModelSerializer):
+
+# Viewsets ------------------------------------        
+
+
+class PublisherSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Test Code
+    from servers.api.serializers import PublisherSerializer
+    serializer = PublisherSerializer()
+    print(repr(serializer))
+    """
+    class Meta:
+        model = Publisher
+        fields = [
+            'url',
+            'id',
+            'name',
+            'status',
+            ]
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'},
+            'name': {'validators': []},
+        }
+
+
+class SoftwareSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
+    publisher = PublisherSerializer()
+    """
+    Test Code
+    from servers.api.serializers import SoftwareSerializer
+    serializer = SoftwareSerializer()
+    print(repr(serializer))
+    """
+
+    class Meta:
+        model = Software
+        fields = [
+            'url',
+            'id',
+            'name',
+            'slug',
+            'status',
+            'version',
+            'publisher',
+
+            ]
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'},
+            'name': {'validators': []},
+        }
+
+    # def create(self, validated_data):
+    #     print(f'\n\nValidated Data \n\n-----------------------------\n{validated_data}\n-----------------------------')
+    #     # software_data = validated_data.pop('software')
+    #     # print(f'\n\nsoftware_data Data \n\n-----------------------------\n{software_data}\n-----------------------------')
+
+    #     publisher_data = validated_data.pop('publisher')
+    #     print(f'\n\npublisher_data Data \n\n-----------------------------\n{publisher_data}\n-----------------------------')
+    #     publisher, created = Publisher.objects.update_or_create(
+    #         name = validated_data.get('name', None),
+    #         defaults={
+    #             'name': validated_data.get('name', None),
+    #             'status': validated_data.get('status', None),
+    #         })
+
+
+class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
+# class ServerSerializer(serializers.HyperlinkedModelSerializer):
+    software = SoftwareSerializer(many=True)
     """
     Test Code
     from servers.api.serializers import ServerSerializer
@@ -355,13 +376,42 @@ class ServerSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'name',
             'status', 
+            'software', 
             ]
         lookup_field = 'slug'
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
-            # 'name': {'validators': []},
+            'name': {'validators': []},
             # 'slug': {'validators': []}
         }
 
 
-# End Server ------------------------------------
+#     def create(self, validated_data):
+#         print(f'\n\nValidated Data \n\n-----------------------------\n{validated_data}\n-----------------------------')
+#         software_data = validated_data.pop('software')
+#         print(f'\n\nsoftware_data Data \n\n-----------------------------\n{software_data}\n-----------------------------')
+#     #     publisher_data = validated_data.pop('publisher')
+#     #     print(f'\n\npublisher_data Data \n\n-----------------------------\n{publisher_data}\n-----------------------------')
+#         server, created = Server.objects.update_or_create(
+#             name = validated_data.get('name', None),
+#             defaults={
+#                 'name': validated_data.get('name', None),
+#                 'status': validated_data.get('status', None),
+#             })
+            
+#         for publisher in software_data:
+#             print('xxx')
+#             name = validated_data.get('publisher'),
+#             print(publisher)
+#         for software in software_data:
+#             software, created = Software.objects.update_or_create(
+#                 name=software['name'],
+#                 version=software['version'],
+#                 )
+#             server.software.add(software)
+#         if created == False:
+#             print(f'Updated {software.name} name')
+#         else:
+#             print(f'Created {software.name} name')
+#         return server
+# # End Software ------------------------------------
