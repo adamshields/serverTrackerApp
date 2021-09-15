@@ -43,7 +43,7 @@ class Software(models.Model):
 
 def pre_save_software(sender, instance, *args, **kwargs):
 	slug = slugify(instance.software_publisher) + "-" + slugify(instance.software_name)
-	instance.slug = slug
+	instance.software_slug = slug
 
 pre_save.connect(pre_save_software, sender=Software)
 
@@ -61,7 +61,7 @@ class Server(models.Model):
         ordering = ('id', 'server_name')
 
     def __str__(self):
-        return self.name
+        return self.server_name
 
     def save(self, *args, **kwargs):
         self.server_slug = slugify(self.server_name)

@@ -48,13 +48,13 @@ class PublisherCreateAPIView(CreateAPIView):
 class PublisherDetailAPIView(RetrieveAPIView):
     queryset = Publisher.objects.all()
     serializer_class = PublisherDetailSerializer
-    lookup_field = "slug"
+    lookup_field = 'publisher_slug'
 
 
 class PublisherListAPIView(ListAPIView):
     queryset = Publisher.objects.all()
     serializer_class = PublisherListSerializer
-    lookup_field = "slug"
+    lookup_field = 'publisher_slug'
 
 
 class SoftwareCreateAPIView(CreateAPIView):
@@ -65,13 +65,13 @@ class SoftwareCreateAPIView(CreateAPIView):
 class SoftwareDetailAPIView(RetrieveAPIView):
     queryset = Software.objects.all()
     serializer_class = SoftwareDetailSerializer
-    lookup_field = "slug"
+    lookup_field = 'software_slug'
 
 
 class SoftwareListAPIView(ListAPIView):
     queryset = Software.objects.all()
     serializer_class = SoftwareListSerializer
-    lookup_field = "slug"
+    lookup_field = 'software_slug'
 
 
 class ServerCreateAPIView(CreateAPIView):
@@ -82,13 +82,13 @@ class ServerCreateAPIView(CreateAPIView):
 class ServerDetailAPIView(RetrieveAPIView):
     queryset = Server.objects.all()
     serializer_class = ServerDetailSerializer
-    lookup_field = "slug"
+    lookup_field = 'server_slug'
 
 
 class ServerListAPIView(ListAPIView):
     queryset = Server.objects.all()
     serializer_class = ServerListSerializer
-    lookup_field = "slug"
+    lookup_field = 'server_slug'
 
 # End API Views ------------------------------------
 
@@ -104,7 +104,7 @@ class PublisherViewSet(viewsets.ModelViewSet):
 
     queryset = Publisher.objects.all()
     serializer_class = PublisherSerializer
-    lookup_field = "slug"
+    lookup_field = 'publisher_slug'
 
 
 class SoftwareViewSet(viewsets.ModelViewSet):
@@ -116,7 +116,7 @@ class SoftwareViewSet(viewsets.ModelViewSet):
 
     queryset = Software.objects.all()
     serializer_class = SoftwareSerializer
-    lookup_field = "slug"
+    lookup_field = 'software_slug'
 
 
 class ServerViewSet(viewsets.ModelViewSet):
@@ -129,7 +129,7 @@ class ServerViewSet(viewsets.ModelViewSet):
 
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
-    lookup_field = "slug"
+    lookup_field = 'server_slug'
 
 
 # End ViewSets ------------------------------------

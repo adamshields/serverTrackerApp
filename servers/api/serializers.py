@@ -31,8 +31,8 @@ class PublisherCreateUpdateSerializer(serializers.ModelSerializer):
         model = Publisher
         fields = [
             'id',
-            'name',
-            'status', 
+            'publisher_name',
+            'publisher_status', 
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -57,11 +57,11 @@ class PublisherDetailSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'id',
-            'name',
-            'status',
-            'software_set', # Reversed
+            'publisher_name',
+            'publisher_status',
+            'publisher_software_set', # Reversed
             ]
-        lookup_field = 'slug'
+        lookup_field = 'publisher_slug'
         # extra_kwargs = {
         #     'url': {'lookup_field': 'slug'},
         #     # 'name': {'validators': []},
@@ -71,7 +71,7 @@ class PublisherDetailSerializer(serializers.ModelSerializer):
 
 
 class PublisherListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='slug')
+    url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='publisher_slug')
     """
     Test Code
     from servers.api.serializers import PublisherListSerializer
@@ -85,9 +85,9 @@ class PublisherListSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'id',
-            'name',
-            'status', 
-            'software_set', # Reversed
+            'publisher_name',
+            'publisher_status', 
+            'publisher_software_set', # Reversed
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -113,10 +113,10 @@ class SoftwareCreateUpdateCustomSerializer(serializers.Serializer):
 
         model = Software
         fields = [
-            'name',
-            'status',
-            'version',
-            'publisher',
+            'software_name',
+            'software_status',
+            'software_version',
+            'software_publisher',
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -142,10 +142,10 @@ class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
 
         model = Software
         fields = [
-            'name',
-            'status',
-            'version',
-            'publisher',
+            'software_name',
+            'software_status',
+            'software_version',
+            'software_publisher',
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -157,7 +157,7 @@ class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class SoftwareDetailSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='slug')
+    url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='software_slug')
     """
     Test Code
     from servers.api.serializers import SoftwareDetailSerializer
@@ -170,12 +170,12 @@ class SoftwareDetailSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'id',
-            'name',
-            'slug',
-            'status',
-            'version',
+            'software_name',
+            'software_slug',
+            'software_status',
+            'software_version',
             ]
-        lookup_field = 'slug'
+        lookup_field = 'software_slug'
         # extra_kwargs = {
         #     'url': {'lookup_field': 'slug'},
         #     # 'name': {'validators': []},
@@ -184,7 +184,7 @@ class SoftwareDetailSerializer(serializers.ModelSerializer):
 
 
 class SoftwareListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='slug')
+    url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='software_slug')
     """
     Test Code
     from servers.api.serializers import SoftwareListSerializer
@@ -197,10 +197,10 @@ class SoftwareListSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'id',
-            'slug',
-            'name',
-            'status',
-            'version',
+            'software_slug',
+            'software_name',
+            'software_status',
+            'software_version',
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -227,9 +227,9 @@ class ServerCreateUpdateSerializer(serializers.ModelSerializer):
         model = Server
         fields = [
             'id',
-            'name',
-            'status', 
-            'software', 
+            'server_name',
+            'server_status', 
+            'server_software', 
             ]
         # lookup_field = 'slug'
         # extra_kwargs = {
@@ -240,7 +240,7 @@ class ServerCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class ServerDetailSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
+    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='server_slug')
     """
     Test Code
     from servers.api.serializers import ServerDetailSerializer
@@ -253,11 +253,11 @@ class ServerDetailSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'id',
-            'name',
-            'status', 
-            'software', 
+            'server_name',
+            'server_status', 
+            'server_software', 
             ]
-        lookup_field = 'slug'
+        lookup_field = 'server_slug'
         # extra_kwargs = {
         #     'url': {'lookup_field': 'slug'},
         #     # 'name': {'validators': []},
@@ -266,7 +266,7 @@ class ServerDetailSerializer(serializers.ModelSerializer):
         depth = 1
 
 class ServerListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='slug')
+    # url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='server_slug')
     """
     Test Code
     from servers.api.serializers import ServerListSerializer
@@ -277,13 +277,13 @@ class ServerListSerializer(serializers.ModelSerializer):
 
         model = Server
         fields = [
-            'url',
+            # 'url',
             'id',
-            'name',
-            'status', 
-            'software', 
+            'server_name',
+            'server_status', 
+            'server_software', 
             ]
-        # lookup_field = 'slug'
+        lookup_field = 'server_slug'
         # extra_kwargs = {
         #     'url': {'lookup_field': 'slug'},
         #     # 'name': {'validators': []},
@@ -307,18 +307,18 @@ class PublisherSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'url',
             'id',
-            'name',
-            'status',
+            'publisher_name',
+            'publisher_status',
             ]
-        lookup_field = 'slug'
+        lookup_field = 'publisher_slug'
         extra_kwargs = {
-            'url': {'lookup_field': 'slug'},
-            'name': {'validators': []},
+            'url': {'lookup_field': 'publisher_slug'},
+            'publisher_name': {'validators': []},
         }
 
 
 class SoftwareSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
-    publisher = PublisherSerializer()
+    software_publisher = PublisherSerializer()
     """
     Test Code
     from servers.api.serializers import SoftwareSerializer
@@ -331,17 +331,17 @@ class SoftwareSerializer(WritableNestedModelSerializer, serializers.HyperlinkedM
         fields = [
             'url',
             'id',
-            'name',
-            'slug',
-            'status',
-            'version',
-            'publisher',
+            'software_name',
+            'software_slug',
+            'software_status',
+            'software_version',
+            'software_publisher',
 
             ]
-        lookup_field = 'slug'
+        lookup_field = 'software_slug'
         extra_kwargs = {
-            'url': {'lookup_field': 'slug'},
-            'name': {'validators': []},
+            'url': {'lookup_field': 'software_slug'},
+            'software_name': {'validators': []},
         }
 
     # def create(self, validated_data):
@@ -361,7 +361,7 @@ class SoftwareSerializer(WritableNestedModelSerializer, serializers.HyperlinkedM
 
 class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
 # class ServerSerializer(serializers.HyperlinkedModelSerializer):
-    software = SoftwareSerializer(many=True)
+    server_software = SoftwareSerializer(many=True)
     """
     Test Code
     from servers.api.serializers import ServerSerializer
@@ -374,14 +374,14 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedMod
         fields = [
             'url',
             'id',
-            'name',
-            'status', 
-            'software', 
+            'server_name',
+            'server_status', 
+            'server_software', 
             ]
         lookup_field = 'slug'
         extra_kwargs = {
-            'url': {'lookup_field': 'slug'},
-            'name': {'validators': []},
+            'url': {'lookup_field': 'server_slug'},
+            'server_name': {'validators': []},
             # 'slug': {'validators': []}
         }
 
