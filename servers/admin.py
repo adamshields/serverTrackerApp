@@ -10,7 +10,7 @@ class PublisherTabularInline(admin.TabularInline):
     model = Publisher
 class SoftwareTabularInline(admin.StackedInline):
     model = Software
-    readonly_fields = ['slug']
+    readonly_fields = ['software_slug']
 
 
 class SoftwareAdmin(admin.ModelAdmin):
@@ -25,7 +25,7 @@ class SoftwareAdmin(admin.ModelAdmin):
     #     'id', 
     #     'name'
     #     ]
-    readonly_fields = ["slug"]
+    readonly_fields = ['software_slug']
 
     class Meta:
         model = Software
@@ -44,7 +44,7 @@ class ServerAdmin(admin.ModelAdmin):
     #     'id', 
     #     'name'
     #     ]
-    readonly_fields = ["slug"]
+    readonly_fields = ['server_slug']
 
     class Meta:
         model = Server
@@ -64,7 +64,7 @@ class PublisherAdminAdmin(admin.ModelAdmin):
     #     'id', 
     #     'name'
     #     ]
-    readonly_fields = ["slug"]
+    readonly_fields = ['publisher_slug']
 
     class Meta:
         model = Publisher
