@@ -34,13 +34,12 @@ class Migration(migrations.Migration):
                 ('software_slug', models.SlugField(null=True, unique=True)),
                 ('software_status', models.BooleanField(default=False, verbose_name='Active')),
                 ('software_version', models.CharField(max_length=200, null=True, verbose_name='Software Version')),
-                ('software_publisher', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='servers.publisher')),
+                ('software_publisher', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='restify.publisher')),
             ],
             options={
                 'verbose_name': 'Software',
                 'verbose_name_plural': 'Software',
                 'ordering': ('id', 'software_name'),
-                'unique_together': {('software_name', 'software_publisher')},
             },
         ),
         migrations.CreateModel(
@@ -50,7 +49,7 @@ class Migration(migrations.Migration):
                 ('server_name', models.CharField(max_length=200, unique=True, verbose_name='Server Name')),
                 ('server_slug', models.SlugField(null=True, unique=True)),
                 ('server_status', models.BooleanField(default=False, verbose_name='Active')),
-                ('server_software', models.ManyToManyField(blank=True, to='servers.Software')),
+                ('server_software', models.ManyToManyField(blank=True, to='restify.Software')),
             ],
             options={
                 'verbose_name': 'Server',
