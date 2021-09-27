@@ -7,7 +7,7 @@ from .serializers import (
     ServerSerializer,
 )
 from rest_framework import viewsets
-
+import re
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -64,7 +64,7 @@ class ServerViewSet(viewsets.ModelViewSet):
         software_data = data['server_software']
 
         for publisher in software_data:
-            import re
+
             publisher_name = publisher['software_publisher']
             # Match and strip punctuation with re.sub()
             publisher_name = re.sub(pattern = "[^\w\s]",
@@ -80,6 +80,11 @@ class ServerViewSet(viewsets.ModelViewSet):
             print(f'\nCreated {publisher.publisher_name}')
 
         for software in software_data:
+            publisher_name=software['software_publisher']
+            publisher_name = re.sub(pattern = "[^\w\s]",
+                    repl = "",
+                    string = publisher_name)
+            print(f'This is loop publisher: {publisher_name}')
             software, created = Software.objects.update_or_create(
                 software_name = software['software_name'],
                 software_version = software['software_version'],
@@ -109,8 +114,14 @@ class ServerViewSet(viewsets.ModelViewSet):
         software_data = data['server_software']
         
         for publisher in software_data:
+            publisher_name = publisher['software_publisher']
+            # Match and strip punctuation with re.sub()
+            publisher_name = re.sub(pattern = "[^\w\s]",
+                    repl = "",
+                    string = publisher_name)
+            print(f'This is loop publisher update: {publisher_name}')
             publisher, created = Publisher.objects.get_or_create(
-                publisher_name = publisher['software_publisher']
+                publisher_name = publisher_name
             )
             if created is True:
                 print(f'\nCreating New Publisher: {publisher}')
@@ -118,10 +129,15 @@ class ServerViewSet(viewsets.ModelViewSet):
                 print(f'\nExisting Publisher: {publisher}')
                 
         for software in software_data:
+            publisher_name=software['software_publisher']
+            publisher_name = re.sub(pattern = "[^\w\s]",
+                    repl = "",
+                    string = publisher_name)
+            print(f'Software Update Publisher: {publisher_name}')
             software, created = Software.objects.get_or_create(
                 software_name = software['software_name'],
                 software_version = software['software_version'],
-                software_publisher = Publisher.objects.get(publisher_name=software['software_publisher'])
+                software_publisher = Publisher.objects.get(publisher_name=publisher_name)
             )
             if created is True:
                 print(f'\nNew Software: {software.software_publisher.id} | {software.software_publisher} | {software.software_name} | {software.software_version} ')
