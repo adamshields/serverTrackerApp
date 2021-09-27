@@ -67,15 +67,12 @@ class ServerViewSet(viewsets.ModelViewSet):
             import re
             publisher_name = publisher['software_publisher']
             # Match and strip punctuation with re.sub()
-            updatedpub = re.sub(pattern = "[^\w\s]",
+            publisher_name = re.sub(pattern = "[^\w\s]",
                     repl = "",
                     string = publisher_name)
-            # publisher_name = publisher['software_publisher'].replace(',', '')
-            # publisher_name = publisher['software_publisher'].strip(",.").upper()
-            # publisher_name = publisher['software_publisher'].re.sub(pattern = "[^\w\s]")
-            print(f'This is loop publisher: {updatedpub}')
+            print(f'This is loop publisher: {publisher_name}')
             publisher, created = Publisher.objects.update_or_create(
-                publisher_name = updatedpub
+                publisher_name = publisher_name
             )
         if created == False:
             print(f'\nUpdated {publisher.publisher_name}')
@@ -86,7 +83,7 @@ class ServerViewSet(viewsets.ModelViewSet):
             software, created = Software.objects.update_or_create(
                 software_name = software['software_name'],
                 software_version = software['software_version'],
-                software_publisher = Publisher.objects.get(publisher_name=updatedpub)
+                software_publisher = Publisher.objects.get(publisher_name=publisher_name)
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
             server.server_software.add(software)
