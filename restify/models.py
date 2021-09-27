@@ -31,14 +31,14 @@ class Software(models.Model):
         verbose_name = ('Software')
         verbose_name_plural = ('Software')
         ordering = ('id', 'software_name')
-        # unique_together = ('software_name', 'software_publisher')
+        unique_together = ('software_name', 'software_version')
 
     def __str__(self):
         return self.software_name
 
 
     def save(self, *args, **kwargs):
-        self.software_slug = slugify(self.software_name)
+        self.software_slug = slugify(self.software_name + "-" + slugify(self.software_version))
         super(Software, self).save(*args, **kwargs)
 
 # def pre_save_software(sender, instance, *args, **kwargs):
