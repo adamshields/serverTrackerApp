@@ -1,6 +1,6 @@
 from rest_framework import serializers, request
 from rest_framework.reverse import reverse
-from restify.models import Server, Software, Publisher
+from restify.models import Server, Software, Publisher, Ait, Project, Environment
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin, NestedUpdateMixin
 
@@ -51,8 +51,40 @@ class SoftwareSerializer(serializers.ModelSerializer):
         }
 
         
+class AitRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Ait.objects.get(ait_number=data)
+
+class ProjectRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Project.objects.get(project_name=data)
+
+class EnvironmentRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Environment.objects.get(environment_name=data)
 
 class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    server_ait      = AitRelatedField(queryset=Ait.objects.all(), many=False)
+    server_project  = ProjectRelatedField(queryset=Project.objects.all(), many=False)
+    server_environment  = ProjectRelatedField(queryset=Project.objects.all(), many=False)
     server_software = SoftwareSerializer(many=True)
     class Meta:
 
@@ -60,43 +92,9 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
         fields = [
             'server_name',
             'server_status', 
+            'server_ait',
+            'server_project',
+            'server_environment',
             'server_software', 
             ]
         lookup_field = 'server_slug'
-        # extra_kwargs = {
-        #     'url': {'lookup_field': 'server_slug'},
-        #     'server_name': {'validators': []},
-        #     'server_slug': {'validators': []},
-        # }
-
-    # def create(self, validated_data):
-    #     software_data = validated_data.pop('server_software')
-    #     server, created = Server.objects.update_or_create(
-    #         server_name = validated_data.get('server_name', None),
-    #         defaults={
-    #             'server_status': validated_data.get('server_status', None),
-    #         })
-            
-    #     for publisher in software_data:
-    #         publisher, created = Publisher.objects.create(
-    #             publisher_name = publisher['software_publisher'],
-    #         )
-    #     if created == False:
-    #         print(f'Updated {publisher.publisher_name} ')
-    #     else:
-    #         print(f'Created {publisher.publisher_name} ')
-
-    #     for software in software_data:
-    #         software, created = Software.objects.update_or_create(
-    #             software_name = software['software_name'],
-    #             defaults={
-    #                 'software_version': software['software_version'],
-    #                 'software_publisher': Publisher.objects.get(publisher_name=software['software_publisher'])
-    #             })
-    #         print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
-    #         server.server_software.add(software)
-    #     if created == False:
-    #         print(f'Updated {software.name} name')
-    #     else:
-    #         print(f'Created {software.name} name')
-    #     return server

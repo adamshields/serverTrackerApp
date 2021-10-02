@@ -38,7 +38,7 @@ class Project(models.Model):
 
     # Foreign Relationships
     project_ait             = models.ForeignKey(Ait, verbose_name='Project AIT #', blank=True, null=True, on_delete=models.CASCADE)
-    
+    # project_environment     = models.ForeignKey(Project, verbose_name='Project Environment', on_delete=models.CASCADE)
     class Meta:
         verbose_name = ('Project')
         verbose_name_plural = ('Projects')
@@ -56,14 +56,14 @@ class Environment(models.Model):
     """
     Environment must have a project
     save() method unique slug
-    Multiple servers can be ties to single environment
+    Multiple servers can be tied to single environment
     """
-    environment_name            = models.CharField(max_length=200, unique=True, verbose_name='Environment Name')
+    environment_name            = models.CharField(max_length=200, verbose_name='Environment Name')
     environment_slug            = models.SlugField(unique=True, null=True)
     environment_status          = models.BooleanField(default=False, verbose_name='Active')
     # environment_software        = models.ManyToManyField(Software, blank=True)
     # environment_project         = models.ForeignKey(Project, verbose_name='Environment Project', on_delete=models.CASCADE)
-    environment_project         = models.ForeignKey(Project, verbose_name='Environment Project', on_delete=models.CASCADE)
+    environment_project         = models.ForeignKey(Project, verbose_name='environment_project - Project Environment', on_delete=models.CASCADE)
 
 
     class Meta:
@@ -160,9 +160,11 @@ class Server(models.Model):
     server_slug            = models.SlugField(unique=True, null=True)
     server_status          = models.BooleanField(default=False, verbose_name='Active')
 
-    server_software        = models.ManyToManyField(Software, blank=True)
+    # ManyToMany
+    server_software        = models.ManyToManyField(Software, blank=True, verbose_name='Server Software')
 
     # Foreign Relationships
+    server_ait             = models.ForeignKey(Ait, verbose_name='Server AIT', blank=True, null=True, on_delete=models.CASCADE)
     server_project         = models.ForeignKey(Project, verbose_name='Server Project', blank=True, null=True, on_delete=models.CASCADE)
     server_environment     = models.ForeignKey(Environment, verbose_name='Server Environment', blank=True, null=True, on_delete=models.CASCADE)
 
