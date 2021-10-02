@@ -63,7 +63,7 @@ class Environment(models.Model):
     environment_status          = models.BooleanField(default=False, verbose_name='Active')
     # environment_software        = models.ManyToManyField(Software, blank=True)
     # environment_project         = models.ForeignKey(Project, verbose_name='Environment Project', on_delete=models.CASCADE)
-    environment_project         = models.ForeignKey(Project, verbose_name='environment_project - Project Environment', on_delete=models.CASCADE)
+    environment_project         = models.ForeignKey(Project, verbose_name=' environment_project - Project Environment', on_delete=models.CASCADE)
 
 
     class Meta:

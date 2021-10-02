@@ -1,5 +1,6 @@
-from restify.models import Publisher, Software, Server
+from restify.models import Publisher, Software, Server, Ait, Project, Environment
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.text import slugify
 
 from .serializers import (
     PublisherSerializer,
@@ -53,10 +54,43 @@ class ServerViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         
         data = request.data
-        print(data)
+
+        ait, created = Ait.objects.update_or_create(
+            ait_number = data['server_ait']
+        )
+        if created == False:
+            print(f'\nUpdated AIT: {ait.ait_number}')
+        else:
+            print(f'\nCreated AIT: {ait.ait_number}')
+
+
+        project, created = Project.objects.update_or_create(
+            project_name = data['server_project']
+        )
+        if created == False:
+            print(f'\nUpdated Project: {project.project_name}')
+        else:
+            print(f'\nCreated Project: {project.project_name}')
+
+
+        environment, created = Environment.objects.update_or_create(
+            environment_name = data['server_environment'],
+            environment_project = Project.objects.get(project_name=project.project_name),
+            environment_slug = slugify(data['server_environment'] + '-' + slugify(project.project_name)),
+            
+        )
+        # environment.environment_project.add(project)
+        if created == False:
+            print(f'\nUpdated Environment: {environment.environment_name} | {environment.environment_project} | {environment.environment_slug}')
+        else:
+            print(f'\nCreated Environment: {environment.environment_name} | {environment.environment_project} | {environment.environment_slug}')
+
 
         server, created = Server.objects.update_or_create(
             server_name = data['server_name'],
+            server_ait = Ait.objects.get(ait_number=ait.ait_number),
+            server_project = Project.objects.get(project_name=project.project_name),
+            server_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             defaults = {
                 'server_status': data['server_status']
             }
