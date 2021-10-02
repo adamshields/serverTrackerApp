@@ -65,7 +65,8 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
         project, created = Project.objects.update_or_create(
-            project_name = data['server_project']
+            project_name = data['server_project'],
+            project_ait = Ait.objects.get(ait_number=ait.ait_number)
         )
         if created == False:
             print(f'\nUpdated Project: {project.project_name}')

@@ -32,7 +32,7 @@ class Project(models.Model):
     project can have multiple AIT's
     project_ait is a foreign key
     """
-    project_name            = models.CharField(max_length=200, unique=True, verbose_name='Project Name')
+    project_name            = models.CharField(max_length=200, verbose_name='Project Name')
     project_slug            = models.SlugField(unique=True, null=True)
     project_status          = models.BooleanField(default=False, verbose_name='Active')
 
@@ -43,12 +43,15 @@ class Project(models.Model):
         verbose_name = ('Project')
         verbose_name_plural = ('Projects')
         ordering = ('id', 'project_name')
+        unique_together = ('project_name', 'project_ait')
+
 
     def __str__(self):
         return self.project_name
 
     def save(self, *args, **kwargs):
-        self.project_slug = slugify(self.project_name)
+        self.project_slug = slugify(self.project_name + '-' + slugify(self.project_ait))
+        # self.project_slug = slugify(self.project_name)
         super(Project, self).save(*args, **kwargs)
 
 
