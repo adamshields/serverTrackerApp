@@ -82,10 +82,10 @@ class EnvironmentRelatedField(serializers.RelatedField):
         return Environment.objects.get(environment_name=data)
 
 class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    server_ait      = AitRelatedField(queryset=Ait.objects.all(), many=False)
-    server_project  = ProjectRelatedField(queryset=Project.objects.all(), many=False)
-    server_environment  = ProjectRelatedField(queryset=Project.objects.all(), many=False)
-    server_software = SoftwareSerializer(many=True)
+    server_ait          = AitRelatedField(queryset=Ait.objects.all())
+    server_project      = ProjectRelatedField(queryset=Project.objects.all())
+    server_environment  = ProjectRelatedField(queryset=Environment.objects.all())
+    server_software     = SoftwareSerializer(many=True)
     class Meta:
 
         model = Server
