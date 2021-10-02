@@ -19,7 +19,7 @@ class Ait(models.Model):
         ordering = ('id', 'ait_number')
 
     def __str__(self):
-        return self.ait_number
+        return str(self.ait_number)
 
     def save(self, *args, **kwargs):
         self.ait_slug = slugify(self.ait_number)
