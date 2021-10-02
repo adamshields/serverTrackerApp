@@ -52,7 +52,7 @@ class SoftwareSerializer(serializers.ModelSerializer):
 
         
 
-class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
+class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     server_software = SoftwareSerializer(many=True)
     class Meta:
 

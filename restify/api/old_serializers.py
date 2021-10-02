@@ -488,6 +488,7 @@ class SoftwareSerializer(WritableNestedModelSerializer, serializers.ModelSeriali
 
 # class ServerSerializer(serializers.HyperlinkedModelSerializer):
 class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='server_slug')
 # class ServerSerializer(serializers.HyperlinkedModelSerializer):
     server_software = SoftwareSerializer(many=True)
     """
