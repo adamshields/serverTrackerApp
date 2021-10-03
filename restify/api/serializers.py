@@ -98,3 +98,47 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
             'server_software', 
             ]
         lookup_field = 'server_slug'
+
+
+class AitSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Ait
+        fields = [
+            'id',
+            'ait_number',
+            'project_set',
+
+            ]
+        lookup_field = 'ait_slug'
+        depth = 1
+
+class ProjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Project
+        fields = [
+            'id',
+            'project_name',
+            'project_ait',
+
+            ]
+        lookup_field = 'project_slug'
+        depth = 1
+
+
+class EnvironmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Environment
+        fields = [
+            'id',
+            'environment_name',
+            'environment_project',
+
+            ]
+        lookup_field = 'environment_slug'
+        depth = 1

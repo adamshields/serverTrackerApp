@@ -3,6 +3,9 @@ from .views import (
     PublisherViewSet,
     SoftwareViewSet,
     ServerViewSet,
+    AitViewSet,
+    ProjectViewSet,
+    EnvironmentViewSet
 )
 from rest_framework import renderers
 from django.urls import path, include
@@ -15,6 +18,9 @@ router = routers.DefaultRouter()
 router.register(r"publishers", PublisherViewSet)
 router.register(r"software", SoftwareViewSet)
 router.register(r"servers", ServerViewSet)
+router.register(r"aits", AitViewSet)
+router.register(r"projects", ProjectViewSet)
+router.register(r"environments", EnvironmentViewSet)
 
 
 urlpatterns = [

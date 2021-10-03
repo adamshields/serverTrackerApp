@@ -6,6 +6,9 @@ from .serializers import (
     PublisherSerializer,
     SoftwareSerializer,
     ServerSerializer,
+    AitSerializer, 
+    ProjectSerializer, 
+    EnvironmentSerializer
 )
 from rest_framework import viewsets
 import re
@@ -13,6 +16,42 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import status
+
+
+
+class AitViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    AitViewSet
+    """
+
+    queryset = Ait.objects.all()
+    serializer_class = AitSerializer
+    lookup_field = 'ait_slug'
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    Project
+    """
+
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    lookup_field = 'project_slug'
+
+class EnvironmentViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    Project
+    """
+
+    queryset = Environment.objects.all()
+    serializer_class = EnvironmentSerializer
+    lookup_field = 'environment_slug'
+
 
 class PublisherViewSet(viewsets.ModelViewSet):
     """
