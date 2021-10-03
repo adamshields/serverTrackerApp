@@ -100,19 +100,7 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
         lookup_field = 'server_slug'
 
 
-class AitSerializer(serializers.ModelSerializer):
 
-    class Meta:
-
-        model = Ait
-        fields = [
-            'id',
-            'ait_number',
-            'project_set',
-
-            ]
-        lookup_field = 'ait_slug'
-        depth = 1
 
 class ProjectSerializer(serializers.ModelSerializer):
 
@@ -127,7 +115,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             ]
         lookup_field = 'project_slug'
         depth = 1
-
+        extra_kwargs = {
+            'url': {'lookup_field': 'project_slug'},
+        }
 
 class EnvironmentSerializer(serializers.ModelSerializer):
 
@@ -142,3 +132,69 @@ class EnvironmentSerializer(serializers.ModelSerializer):
             ]
         lookup_field = 'environment_slug'
         depth = 1
+
+class AitServerProjectSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+
+        model = Server
+        fields = [
+            'url',
+            # 'id',
+            'server_name',
+            # 'project_ait',
+            # 'server_set',
+
+            ]
+        lookup_field = 'server_slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'server_slug'},
+        }
+
+class AitServerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Server
+        fields = [
+            'server_name',
+            'server_status', 
+            ]
+        lookup_field = 'server_slug'
+
+class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
+    server_set = AitServerProjectSerializer(many=True)
+    class Meta:
+
+        model = Project
+        fields = [
+            # 'id',
+            'url',
+            'project_name',
+            'server_set',
+
+            ]
+        lookup_field = 'project_slug'
+        depth = 1
+        extra_kwargs = {
+            'url': {'lookup_field': 'project_slug'},
+        }
+
+class AitSerializer(serializers.HyperlinkedModelSerializer):
+    project_set = AitProjectSerializer(many=True)
+    # server_set = AitServerSerializer(many=True)
+    class Meta:
+
+        model = Ait
+        fields = [
+            'url',
+            'id',
+            'ait_number',
+            'project_set',
+            # 'server_set',
+
+            ]
+        lookup_field = 'ait_slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'ait_slug'},
+        }
