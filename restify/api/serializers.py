@@ -101,14 +101,29 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
 
 
 
+class ProjectAitSerializer(serializers.ModelSerializer):
 
-class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
 
+        model = Ait
+        fields = [
+            'url',
+            'ait_number',
+            # 'project_ait',
+
+            ]
+        lookup_field = 'ait_slug'
+        # depth = 1
+        extra_kwargs = {
+            'url': {'lookup_field': 'ait_slug'},
+        }
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    project_ait = ProjectAitSerializer(many=False)
     class Meta:
 
         model = Project
         fields = [
-            'id',
+            'url',
             'project_name',
             'project_ait',
 
@@ -119,20 +134,23 @@ class ProjectSerializer(serializers.ModelSerializer):
             'url': {'lookup_field': 'project_slug'},
         }
 
-class EnvironmentSerializer(serializers.ModelSerializer):
-
+class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
+    environment_project = ProjectSerializer()
     class Meta:
 
         model = Environment
         fields = [
+            'url',
             'id',
-            'environment_name',
             'environment_project',
+            'environment_name',
 
             ]
         lookup_field = 'environment_slug'
         depth = 1
-
+        extra_kwargs = {
+            'url': {'lookup_field': 'environment_slug'},
+        }
 class AitServerProjectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
@@ -175,7 +193,7 @@ class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
 
             ]
         lookup_field = 'project_slug'
-        depth = 1
+        # depth = 1
         extra_kwargs = {
             'url': {'lookup_field': 'project_slug'},
         }
