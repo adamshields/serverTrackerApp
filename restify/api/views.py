@@ -76,8 +76,8 @@ class ServerViewSet(viewsets.ModelViewSet):
 
         environment, created = Environment.objects.update_or_create(
             environment_name = data['server_environment'],
-            environment_project = Project.objects.get(project_name=project.project_name),
-            environment_slug = slugify(data['server_environment'] + '-' + slugify(project.project_name)),
+            environment_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+            # environment_slug = slugify(data['server_environment'] + '-' + slugify(project.project_name)),
             
         )
         # environment.environment_project.add(project)
@@ -89,11 +89,14 @@ class ServerViewSet(viewsets.ModelViewSet):
 
         server, created = Server.objects.update_or_create(
             server_name = data['server_name'],
-            server_ait = Ait.objects.get(ait_number=ait.ait_number),
-            server_project = Project.objects.get(project_name=project.project_name),
-            server_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
+            # server_ait = Ait.objects.get(ait_number=ait.ait_number),
+            # server_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+            # server_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             defaults = {
-                'server_status': data['server_status']
+                'server_status': data['server_status'],
+                'server_ait': Ait.objects.get(ait_number=ait.ait_number),
+                'server_project': Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+                'server_environment': Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             }
         )
         software_data = data['server_software']

@@ -13,15 +13,19 @@ class SoftwareTabularInline(admin.StackedInline):
     readonly_fields = ['software_slug']
 
 class AitAdmin(admin.ModelAdmin):
+    def projects(self, obj):
+        return ', '.join([project.project_name for project in obj.project_set.all()])
+
     list_display = [
         'id',
         'ait_number',
+        'projects',
 				]
     list_display_links = [
         'id',
         'ait_number',
         ]
-    readonly_fields = ['ait_slug']
+    exclude = ['ait_slug']
 
     class Meta:
         model = Ait
@@ -50,10 +54,12 @@ class EnvironmentAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'environment_name',
+        'environment_project',
 				]
     list_display_links = [
         'id',
         'environment_name',
+        'environment_project',
         ]
     readonly_fields = ['environment_slug']
 
@@ -82,17 +88,20 @@ class SoftwareAdmin(admin.ModelAdmin):
 admin.site.register(Software, SoftwareAdmin)
 
 class ServerAdmin(admin.ModelAdmin):
-    # list_display = [
-    #     "id",
-    #     "name",
-    #     "ip_address",	
-    #     "fqdn",	
-    #     "status",	
-	# 			]
-    # list_display_links = [
-    #     'id', 
-    #     'name'
-    #     ]
+    list_display = [
+        'id',
+        'server_name',
+        'server_ait',
+        'server_project',
+        'server_environment',
+				]
+    list_display_links = [
+        'id',
+        'server_name',
+        'server_ait',
+        'server_project',
+        'server_environment',
+        ]
     readonly_fields = ['server_slug']
 
     class Meta:

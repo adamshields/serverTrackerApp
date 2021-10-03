@@ -47,7 +47,9 @@ class Project(models.Model):
 
 
     def __str__(self):
-        return self.project_name
+        return (f'{self.project_name}-{self.project_ait}')
+        # return (self.project_name + str(self.project_ait))
+        # return self.project_name
 
     def save(self, *args, **kwargs):
         self.project_slug = slugify(self.project_name + '-' + slugify(self.project_ait))
@@ -73,6 +75,7 @@ class Environment(models.Model):
         verbose_name = ('Environment')
         verbose_name_plural = ('Environments')
         ordering = ('id', 'environment_name')
+        unique_together = ('environment_name', 'environment_project')
 
     def __str__(self):
         return self.environment_name
