@@ -47,9 +47,9 @@ class Project(models.Model):
 
 
     def __str__(self):
-        return (f'{self.project_name}-{self.project_ait}')
+        # return (f'{self.project_name}-{self.project_ait}')
         # return (self.project_name + str(self.project_ait))
-        # return self.project_name
+        return self.project_name
 
     def save(self, *args, **kwargs):
         self.project_slug = slugify(self.project_name + '-' + slugify(self.project_ait))
