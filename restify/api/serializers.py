@@ -79,7 +79,7 @@ class EnvironmentRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Environment.objects.get(environment_name=data)
+        return Environment.objects.get(environment_project=data)
 
 class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     server_ait          = AitRelatedField(queryset=Ait.objects.all())
@@ -182,6 +182,8 @@ class AitServerSerializer(serializers.ModelSerializer):
 
 class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
     server_set = AitServerProjectSerializer(many=True)
+    # environment_set = EnvironmentRelatedField(read_only=True)
+    environment_set  = ProjectRelatedField(queryset=Environment.objects.all(), many=True)
     class Meta:
 
         model = Project
@@ -189,6 +191,7 @@ class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
             # 'id',
             'url',
             'project_name',
+            'environment_set',
             'server_set',
 
             ]
