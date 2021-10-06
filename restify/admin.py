@@ -13,18 +13,26 @@ class SoftwareTabularInline(admin.StackedInline):
     readonly_fields = ['software_slug']
 
 class AitAdmin(admin.ModelAdmin):
+
     def projects(self, obj):
         return ', '.join([project.project_name for project in obj.project_set.all()])
+
+    search_fields = [
+        'id',
+        'project__project_name',
+		]
 
     list_display = [
         'id',
         'ait_number',
         'projects',
-				]
+		]
+
     list_display_links = [
         'id',
         'ait_number',
         ]
+
     exclude = ['ait_slug']
 
     class Meta:
@@ -33,16 +41,24 @@ class AitAdmin(admin.ModelAdmin):
 admin.site.register(Ait, AitAdmin)
 
 class ProjectAdmin(admin.ModelAdmin):
+
+    search_fields = [
+        'project_name',
+        'project_ait__ait_number',
+		]
+
     list_display = [
         'id',
         'project_name',
         'project_ait',
-				]
+		]
+
     list_display_links = [
         'id',
         'project_name',
         'project_ait',
         ]
+
     readonly_fields = ['project_slug']
 
     class Meta:
@@ -51,11 +67,18 @@ class ProjectAdmin(admin.ModelAdmin):
 admin.site.register(Project, ProjectAdmin)
 
 class EnvironmentAdmin(admin.ModelAdmin):
+
+    search_fields = [
+        'environment_name',
+        'environment_project__project_name',
+		]
+
     list_display = [
         'id',
         'environment_name',
         'environment_project',
-				]
+		]
+
     list_display_links = [
         'id',
         'environment_name',
@@ -69,17 +92,24 @@ class EnvironmentAdmin(admin.ModelAdmin):
 admin.site.register(Environment, EnvironmentAdmin)
 
 class SoftwareAdmin(admin.ModelAdmin):
-    # list_display = [
-    #     "id",
-    #     "name",
-    #     "ip_address",	
-    #     "fqdn",	
-    #     "status",	
-	# 			]
-    # list_display_links = [
-    #     'id', 
-    #     'name'
-    #     ]
+
+    search_fields = [
+        'software_name',
+        'software_publisher__publisher_name',
+		]
+
+    list_display = [
+        'id',
+        'software_name',
+        'software_publisher',
+		]
+
+    list_display_links = [
+        'id',
+        'software_name',
+        'software_publisher',
+        ]
+
     readonly_fields = ['software_slug']
 
     class Meta:
@@ -88,13 +118,23 @@ class SoftwareAdmin(admin.ModelAdmin):
 admin.site.register(Software, SoftwareAdmin)
 
 class ServerAdmin(admin.ModelAdmin):
+
+    list_filter = [
+        'id',
+        'server_name',
+        'server_ait',
+        'server_project',
+        'server_environment',
+		]
+
     list_display = [
         'id',
         'server_name',
         'server_ait',
         'server_project',
         'server_environment',
-				]
+		]
+        
     list_display_links = [
         'id',
         'server_name',
@@ -102,6 +142,7 @@ class ServerAdmin(admin.ModelAdmin):
         'server_project',
         'server_environment',
         ]
+
     readonly_fields = ['server_slug']
 
     class Meta:
@@ -111,17 +152,11 @@ admin.site.register(Server, ServerAdmin)
 
 
 class PublisherAdminAdmin(admin.ModelAdmin):
+    
     inlines = [SoftwareTabularInline]
-    # list_display = [
-    #     "id",
-    #     "name",
-    #     "version",	
-    #     "status",	
-	# 			]
-    # list_display_links = [
-    #     'id', 
-    #     'name'
-    #     ]
+    search_fields = [
+        'publisher_name'
+    ]
     readonly_fields = ['publisher_slug']
 
     class Meta:
