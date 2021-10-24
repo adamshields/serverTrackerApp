@@ -9,6 +9,7 @@ django-crispy-forms==1.13.0
 djangorestframework==3.12.4
 drf-writable-nested==0.6.3
 mypy-extensions==0.4.3
+mysqlclient==2.0.3
 pathspec==0.9.0
 postgres==4.0
 psycopg2==2.9.1
