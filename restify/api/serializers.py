@@ -323,7 +323,8 @@ class AitServerAPISerializerRelatedfield(serializers.RelatedField):
 
 class AitEnvironmentSerializer(serializers.ModelSerializer):
     # environment_project = ProjectSerializer()
-    server  = AitServerAPISerializerRelatedfield(queryset=Server.objects.all(), many=True, source='server_set')
+    # server  = AitServerAPISerializerRelatedfield(queryset=Server.objects.all(), many=True, source='server_set')
+    server  = AitServerProjectSerializer(many=True, source='server_set')
     class Meta:
 
         model = Environment
