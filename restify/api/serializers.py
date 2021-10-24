@@ -121,7 +121,7 @@ class EnvironmentRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return Environment.objects.get(environment_project=data)
 
-class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
     server_ait          = AitRelatedField(queryset=Ait.objects.all())
     server_project      = ProjectRelatedField(queryset=Project.objects.all())
     server_environment  = ProjectRelatedField(queryset=Environment.objects.all())
@@ -130,6 +130,7 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
 
         model = Server
         fields = [
+            'url',
             'server_name',
             'server_status', 
             'server_ait',
@@ -137,7 +138,9 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
             'server_environment',
             'server_software', 
             ]
-        lookup_field = 'server_slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'server_slug'},
+        }
 
 
 
