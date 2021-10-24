@@ -1,6 +1,8 @@
 from restify.models import Publisher, Software, Server, Ait, Project, Environment
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from .serializers import (
     PublisherSerializer,
@@ -84,6 +86,8 @@ class ServerViewSet(viewsets.ModelViewSet):
 
     ServerViewSet
     """
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['server_ait__ait_number', 'server_project__project_name', 'server_environment__environment_name', 'server_software__software_name']
 
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
