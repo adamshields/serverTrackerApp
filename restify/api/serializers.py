@@ -6,14 +6,44 @@ from drf_writable_nested.mixins import UniqueFieldsMixin, NestedUpdateMixin
 
 from django.utils.text import slugify
 
+class PublisherSoftwareSerializer(serializers.ModelSerializer):
+    # software_publisher = PublisherRelatedField(queryset=Publisher.objects.all(), many=False)
+    class Meta:
+        model = Software
+        fields = [
+            # 'software_publisher',
+            'software_name',
+            'software_version',
 
-class PublisherSerializer(serializers.ModelSerializer):
+            ]
+        lookup_field = 'software_slug'
+        extra_kwargs = {
+            # 'software_name': {'validators': []},
+            # 'software_slug': {'validators': []},
+            # 'software_publisher': {'validators': []},
+        }
+
+class SoftwareRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Software.objects.get(software_name=data)
+
+class PublisherSerializer(serializers.HyperlinkedModelSerializer):
+    # software = SoftwareRelatedField(queryset=Software.objects.all(), many=True, source='software_set')
+    software = PublisherSoftwareSerializer(many=True, source='software_set')
     class Meta:
         model = Publisher
         fields = [
+            'url',
             'id',
             'publisher_name',
             'publisher_status',
+            'software',
             ]
         lookup_field = 'publisher_slug'
         extra_kwargs = {
@@ -60,7 +90,15 @@ class SoftwareAPISerializer(serializers.ModelSerializer):
 
 # -------------------- SoftwareAPISerializer
 
+class ServerRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
 
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Server.objects.get(server_name=data)
 
 
 class PublisherRelatedField(serializers.RelatedField):
@@ -127,7 +165,7 @@ class ServerSerializer(serializers.HyperlinkedModelSerializer):
     # url = serializers.HyperlinkedIdentityField(context={'request':request})
     server_ait          = AitRelatedField(queryset=Ait.objects.all())
     server_project      = ProjectRelatedField(queryset=Project.objects.all())
-    server_environment  = ProjectRelatedField(queryset=Environment.objects.all())
+    server_environment  = EnvironmentRelatedField(queryset=Environment.objects.all())
     server_software     = SoftwareSerializer(many=True)
     class Meta:
 
@@ -164,16 +202,36 @@ class ProjectAitSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'url': {'lookup_field': 'ait_slug'},
         }
+class ProjectServerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Server
+        fields = [
+            'url',
+            'server_name',
+            # 'project_ait',
+
+            ]
+        lookup_field = 'server_slug'
+        # depth = 1
+        extra_kwargs = {
+            'url': {'lookup_field': 'server_slug'},
+        }
 class ProjectSerializer(serializers.ModelSerializer):
-    project_ait = ProjectAitSerializer(many=False)
+    # project_ait = ProjectAitSerializer(many=False)
+    project_ait          = AitRelatedField(queryset=Ait.objects.all())
+    project_server       = ProjectServerSerializer(many=True, source='server_set')
+
     class Meta:
 
         model = Project
         fields = [
             'url',
-            'project_name',
             'project_ait',
-            'server_set',
+            'project_name',
+            'project_server',
+            # 'server_set',
 
             ]
         lookup_field = 'project_slug'
@@ -185,6 +243,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
     # environment_project = ProjectSerializer()
     environment_project      = ProjectRelatedField(queryset=Project.objects.all())
+    environment_servers      = ServerRelatedField(queryset=Server.objects.all(), many=True, source='server_set')
     class Meta:
 
         model = Environment
@@ -193,6 +252,7 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'environment_name',
             'environment_project',
+            'environment_servers',
 
             ]
         lookup_field = 'environment_slug'
