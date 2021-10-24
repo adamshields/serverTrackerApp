@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-mothership
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-mothership
+  template:
+    metadata:
+      labels:
+        app: django-mothership
+    spec:
+      containers:
+      - name: django-mothership
+        image: swampyeti/django-mothership:latest
+        # image: [swampyeti]/[django-mothership]:[latest]
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_HOST
+          value: "server683692875.postgres.database.azure.com"
+        - name: DATABASE_USERNAME
+          value: "sinfulgull7"
+        - name: DATABASE_PASSWORD
+          value: "JhfdzqHycuxei1rFibSR6Q"
+        - name: DATABASE_NAME
+          value: "flexibleserverdb"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - django-mothership
+              topologyKey: "kubernetes.io/hostname"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8000
+  selector:
+    app: django-mothership
