@@ -121,7 +121,7 @@ class EnvironmentRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return Environment.objects.get(environment_project=data)
 
-class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
+class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     server_ait          = AitRelatedField(queryset=Ait.objects.all())
     server_project      = ProjectRelatedField(queryset=Project.objects.all())
     server_environment  = ProjectRelatedField(queryset=Environment.objects.all())
@@ -130,7 +130,7 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedMod
 
         model = Server
         fields = [
-            'url',
+            # 'url',
             'server_name',
             'server_status', 
             'server_ait',
@@ -160,7 +160,7 @@ class ProjectAitSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'url': {'lookup_field': 'ait_slug'},
         }
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     project_ait = ProjectAitSerializer(many=False)
     class Meta:
 
@@ -169,6 +169,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'project_name',
             'project_ait',
+            'server_set',
 
             ]
         lookup_field = 'project_slug'
@@ -194,6 +195,8 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'url': {'lookup_field': 'environment_slug'},
         }
+
+
 class AitServerProjectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
@@ -223,10 +226,60 @@ class AitServerSerializer(serializers.ModelSerializer):
             ]
         lookup_field = 'server_slug'
 
+class AitProjectAPIRelatedfield(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Project.objects.get(project_name=data)
+
+class AitEnvironmentAPISerializerRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Environment.objects.get(environment_name=data)
+
+class AitServerAPISerializerRelatedfield(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Server.objects.get(server_name=data)
+
+class AitEnvironmentSerializer(serializers.ModelSerializer):
+    # environment_project = ProjectSerializer()
+    server  = AitServerAPISerializerRelatedfield(queryset=Server.objects.all(), many=True, source='server_set')
+    class Meta:
+
+        model = Environment
+        fields = [
+            'url',
+            'id',
+            # 'environment_project',
+            'environment_name',
+            'server',
+
+            ]
+        lookup_field = 'environment_slug'
+        depth = 1
+        extra_kwargs = {
+            'url': {'lookup_field': 'environment_slug'},
+        }
 class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
-    server_set = AitServerProjectSerializer(many=True)
+    # server = AitServerProjectSerializer(many=True, source='server_set')
     # environment_set = EnvironmentRelatedField(read_only=True)
-    environment_set  = ProjectRelatedField(queryset=Environment.objects.all(), many=True)
+    # environment  = AitEnvironmentAPISerializerRelatedField(queryset=Environment.objects.all(), many=True, source='environment_set')
+    environment  = AitEnvironmentSerializer(many=True, source='environment_set')
     class Meta:
 
         model = Project
@@ -234,19 +287,22 @@ class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
             # 'id',
             'url',
             'project_name',
-            'environment_set',
-            'server_set',
+            'environment',
+            # 'server',
 
             ]
         lookup_field = 'project_slug'
-        # depth = 1
         extra_kwargs = {
             'url': {'lookup_field': 'project_slug'},
         }
 
+
 class AitSerializer(serializers.HyperlinkedModelSerializer):
-    project_set = AitProjectSerializer(many=True)
+    project = AitProjectSerializer(many=True, source='project_set')
+    
     # server_set = AitServerSerializer(many=True)
+    # project = AitProjectAPIRelatedfield(queryset=Project.objects.all(), many=True, source='project_set')
+    # server = SoftwareServerAPIRelatedField(queryset=Server.objects.all(), many=True, source='server_set')
     class Meta:
 
         model = Ait
@@ -254,11 +310,12 @@ class AitSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'id',
             'ait_number',
-            'project_set',
-            # 'server_set',
+            'project',
+            # 'project',
+            # 'server',
 
             ]
-        lookup_field = 'ait_slug'
+        # lookup_field = 'ait_slug'
         extra_kwargs = {
             'url': {'lookup_field': 'ait_slug'},
         }
