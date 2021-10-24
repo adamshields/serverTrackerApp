@@ -93,6 +93,7 @@ class ServerViewSet(viewsets.ModelViewSet):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
     lookup_field = 'server_slug'
+    
 
 
     def create(self, request, *args, **kwargs):
@@ -174,7 +175,8 @@ class ServerViewSet(viewsets.ModelViewSet):
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
             server.server_software.add(software)
-        serializer = ServerSerializer(server)
+
+        serializer = ServerSerializer(server, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -261,7 +263,7 @@ class ServerViewSet(viewsets.ModelViewSet):
             server.server_software.add(software)
         serializer = ServerSerializer(server)
 
-        serializer = ServerSerializer(server)
+        serializer = ServerSerializer(server, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
