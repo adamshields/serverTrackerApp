@@ -16,7 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 # from servers.api.views import 
+from .views import IndexTemplateView
+
+admin.site.site_header ='Mothership'
+admin.site.index_title ='Models Area'
+admin.site.site_title = admin.site.site_header + ' | ' + 'Administration'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api3/', include('servers.api.urls')),
+    path('', IndexTemplateView.as_view(template_name='index.html'), name='index'),
+    path('', include('restify.api.urls')),
 ]
