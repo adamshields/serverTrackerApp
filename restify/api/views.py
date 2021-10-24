@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (
     PublisherSerializer,
     SoftwareSerializer,
+    SoftwareAPISerializer,
     ServerSerializer,
     AitSerializer, 
     ProjectSerializer, 
@@ -75,7 +76,7 @@ class SoftwareViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Software.objects.all()
-    serializer_class = SoftwareSerializer
+    serializer_class = SoftwareAPISerializer
     lookup_field = 'software_slug'
 
 

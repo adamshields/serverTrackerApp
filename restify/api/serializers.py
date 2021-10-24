@@ -22,6 +22,46 @@ class PublisherSerializer(serializers.ModelSerializer):
             'publisher_slug': {'validators': []},
         }
 
+# -------------------- SoftwareAPISerializer
+
+class PublisherAPIRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Publisher.objects.get(publisher_name=data)
+
+class SoftwareServerAPIRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Server.objects.get(server_name=data)
+        
+class SoftwareAPISerializer(serializers.ModelSerializer):
+    software_publisher = PublisherAPIRelatedField(queryset=Publisher.objects.all(), many=False)
+    server = SoftwareServerAPIRelatedField(queryset=Server.objects.all(), many=True, source='server_set')
+    class Meta:
+        model = Software
+        fields = [
+            'software_publisher',
+            'software_name',
+            'software_version',
+            'server',
+
+            ]
+        lookup_field = 'software_slug'
+
+# -------------------- SoftwareAPISerializer
+
+
+
 
 class PublisherRelatedField(serializers.RelatedField):
     def display_value(self, instance):
