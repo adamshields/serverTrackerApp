@@ -28,6 +28,8 @@ class AitViewSet(viewsets.ModelViewSet):
     `update` and `destroy` actions.
     AitViewSet
     """
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['ait_number']
 
     queryset = Ait.objects.all()
     serializer_class = AitSerializer
@@ -70,21 +72,17 @@ class PublisherViewSet(viewsets.ModelViewSet):
 
 class SoftwareViewSet(viewsets.ModelViewSet):
     """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
     SoftwareViewSet
     """
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['software_publisher']
 
     queryset = Software.objects.all()
     serializer_class = SoftwareAPISerializer
     lookup_field = 'software_slug'
 
-
 class ServerViewSet(viewsets.ModelViewSet):
     """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-
     ServerViewSet
     """
     filter_backends = [DjangoFilterBackend]
