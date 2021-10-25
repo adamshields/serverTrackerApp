@@ -245,8 +245,10 @@ class ServerSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
+
     environment_project      = ProjectRelatedField(queryset=Project.objects.all())
     environment_servers      = BaseHyperlinkedServer(many=True, source='server_set')
+
     class Meta:
 
         model = Environment
@@ -256,9 +258,7 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
             'environment_name',
             'environment_project',
             'environment_servers',
-
             ]
-        lookup_field = 'environment_slug'
 
         extra_kwargs = {
             'url': {'lookup_field': 'environment_slug'},
@@ -266,8 +266,9 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProjectEnvironmentSerializer(serializers.HyperlinkedModelSerializer):
-    # environment_project      = ProjectRelatedField(queryset=Project.objects.all())
+
     environment_servers      = BaseHyperlinkedServer(many=True, source='server_set')
+    
     class Meta:
 
         model = Environment
@@ -275,11 +276,8 @@ class ProjectEnvironmentSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'url',
             'environment_name',
-            # 'environment_project',
             'environment_servers',
-
             ]
-        lookup_field = 'environment_slug'
 
         extra_kwargs = {
             'url': {'lookup_field': 'environment_slug'},
@@ -287,9 +285,7 @@ class ProjectEnvironmentSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
 
-    project_ait          = AitRelatedField(queryset=Ait.objects.all())
-    # project_server       = BaseHyperlinkedServer(many=True, source='server_set')
-    # environment_project      = ProjectRelatedField(queryset=Environment.objects.all(), many=True, source='environment_set')
+    project_ait              = AitRelatedField(queryset=Ait.objects.all())
     environment_project      = ProjectEnvironmentSerializer(many=True, source='environment_set')
 
     class Meta:
@@ -299,7 +295,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             'url',
             'project_ait',
             'project_name',
-            # 'project_server',
             'environment_project',
 
             ]
