@@ -6,129 +6,6 @@ from drf_writable_nested.mixins import UniqueFieldsMixin, NestedUpdateMixin
 
 from django.utils.text import slugify
 
-class PublisherSoftwareSerializer(serializers.ModelSerializer):
-    # software_publisher = PublisherRelatedField(queryset=Publisher.objects.all(), many=False)
-    class Meta:
-        model = Software
-        fields = [
-            # 'software_publisher',
-            'software_name',
-            'software_version',
-
-            ]
-        lookup_field = 'software_slug'
-        extra_kwargs = {
-            # 'software_name': {'validators': []},
-            # 'software_slug': {'validators': []},
-            # 'software_publisher': {'validators': []},
-        }
-
-class SoftwareRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Software.objects.get(software_name=data)
-
-class PublisherSerializer(serializers.HyperlinkedModelSerializer):
-    # software = SoftwareRelatedField(queryset=Software.objects.all(), many=True, source='software_set')
-    software = PublisherSoftwareSerializer(many=True, source='software_set')
-    class Meta:
-        model = Publisher
-        fields = [
-            'url',
-            'id',
-            'publisher_name',
-            'publisher_status',
-            'software',
-            ]
-        lookup_field = 'publisher_slug'
-        extra_kwargs = {
-            'url': {'lookup_field': 'publisher_slug'},
-            'publisher_name': {'validators': []},
-            'publisher_slug': {'validators': []},
-        }
-
-# -------------------- SoftwareAPISerializer
-
-class PublisherAPIRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Publisher.objects.get(publisher_name=data)
-
-class SoftwareServerAPIRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Server.objects.get(server_name=data)
-        
-class SoftwareAPISerializer(serializers.ModelSerializer):
-    software_publisher = PublisherAPIRelatedField(queryset=Publisher.objects.all(), many=False)
-    server = SoftwareServerAPIRelatedField(queryset=Server.objects.all(), many=True, source='server_set')
-    class Meta:
-        model = Software
-        fields = [
-            'software_publisher',
-            'software_name',
-            'software_version',
-            'server',
-
-            ]
-        lookup_field = 'software_slug'
-
-# -------------------- SoftwareAPISerializer
-
-class ServerRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Server.objects.get(server_name=data)
-
-
-class PublisherRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Publisher.objects.get(publisher_name=data)
-        
-class SoftwareSerializer(serializers.ModelSerializer):
-    software_publisher = PublisherRelatedField(queryset=Publisher.objects.all(), many=False)
-    class Meta:
-        model = Software
-        fields = [
-            'software_publisher',
-            'software_name',
-            'software_version',
-
-            ]
-        lookup_field = 'software_slug'
-        extra_kwargs = {
-            # 'software_name': {'validators': []},
-            # 'software_slug': {'validators': []},
-            # 'software_publisher': {'validators': []},
-        }
-
-        
 class AitRelatedField(serializers.RelatedField):
     def display_value(self, instance):
         return instance
@@ -158,6 +35,184 @@ class EnvironmentRelatedField(serializers.RelatedField):
 
     def to_internal_value(self, data):
         return Environment.objects.get(environment_project=data)
+class SoftwareRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Software.objects.get(software_name=data)
+
+class PublisherAPIRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Publisher.objects.get(publisher_name=data)
+
+class SoftwareServerAPIRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Server.objects.get(server_name=data)
+
+class ServerRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Server.objects.get(server_name=data)
+
+
+class PublisherRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Publisher.objects.get(publisher_name=data)
+
+class AitProjectAPIRelatedfield(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Project.objects.get(project_name=data)
+
+class AitEnvironmentAPISerializerRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Environment.objects.get(environment_name=data)
+
+class AitServerAPISerializerRelatedfield(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return Server.objects.get(server_name=data)
+
+class BaseHyperlinkedServer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+
+        model = Server
+
+        fields = [
+            'url',
+            'server_name',
+            'server_status',
+            ]
+        
+        extra_kwargs = {
+            'url': {'lookup_field': 'server_slug'},
+        }
+
+
+
+class PublisherSoftwareSerializer(serializers.HyperlinkedModelSerializer):
+    # software_publisher = PublisherRelatedField(queryset=Publisher.objects.all(), many=False)
+    server = BaseHyperlinkedServer(many=True, source='server_set')
+    class Meta:
+        model = Software
+        fields = [
+            'url',
+            'software_name',
+            'software_version',
+            'server',
+
+            ]
+        lookup_field = 'software_slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'software_slug'},
+            # 'software_slug': {'validators': []},
+            # 'software_publisher': {'validators': []},
+        }
+
+
+class PublisherSerializer(serializers.HyperlinkedModelSerializer):
+    # software = SoftwareRelatedField(queryset=Software.objects.all(), many=True, source='software_set')
+    software = PublisherSoftwareSerializer(many=True, source='software_set')
+
+    class Meta:
+        model = Publisher
+        fields = [
+            'url',
+            'id',
+            'publisher_name',
+            'publisher_status',
+            'software',
+            ]
+        lookup_field = 'publisher_slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'publisher_slug'},
+            'publisher_name': {'validators': []},
+            'publisher_slug': {'validators': []},
+        }
+
+        
+class SoftwareAPISerializer(serializers.HyperlinkedModelSerializer):
+    software_publisher = PublisherAPIRelatedField(queryset=Publisher.objects.all(), many=False)
+    server = BaseHyperlinkedServer(many=True, source='server_set')
+    class Meta:
+        model = Software
+        fields = [
+            'url',
+            'software_publisher',
+            'software_name',
+            'software_version',
+            'server',
+
+            ]
+        lookup_field = 'software_slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'software_slug'},
+        }
+
+        
+class SoftwareSerializer(serializers.ModelSerializer):
+    software_publisher = PublisherRelatedField(queryset=Publisher.objects.all(), many=False)
+    class Meta:
+        model = Software
+        fields = [
+            'software_publisher',
+            'software_name',
+            'software_version',
+
+            ]
+        lookup_field = 'software_slug'
+        extra_kwargs = {
+            # 'software_name': {'validators': []},
+            # 'software_slug': {'validators': []},
+            # 'software_publisher': {'validators': []},
+        }
+
+        
+
 
 # class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
 # class ServerSerializer(serializers.ModelSerializer):
@@ -202,26 +257,11 @@ class ProjectAitSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'url': {'lookup_field': 'ait_slug'},
         }
-class ProjectServerSerializer(serializers.ModelSerializer):
 
-    class Meta:
-
-        model = Server
-        fields = [
-            'url',
-            'server_name',
-            # 'project_ait',
-
-            ]
-        lookup_field = 'server_slug'
-        # depth = 1
-        extra_kwargs = {
-            'url': {'lookup_field': 'server_slug'},
-        }
 class ProjectSerializer(serializers.ModelSerializer):
     # project_ait = ProjectAitSerializer(many=False)
     project_ait          = AitRelatedField(queryset=Ait.objects.all())
-    project_server       = ProjectServerSerializer(many=True, source='server_set')
+    project_server       = BaseHyperlinkedServer(many=True, source='server_set')
 
     class Meta:
 
@@ -241,9 +281,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         }
 
 class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
-    # environment_project = ProjectSerializer()
     environment_project      = ProjectRelatedField(queryset=Project.objects.all())
-    environment_servers      = ServerRelatedField(queryset=Server.objects.all(), many=True, source='server_set')
+    environment_servers      = BaseHyperlinkedServer(many=True, source='server_set')
     class Meta:
 
         model = Environment
@@ -262,69 +301,11 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class AitServerProjectSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-
-        model = Server
-        fields = [
-            'url',
-            # 'id',
-            'server_name',
-            # 'project_ait',
-            # 'server_set',
-
-            ]
-        lookup_field = 'server_slug'
-        extra_kwargs = {
-            'url': {'lookup_field': 'server_slug'},
-        }
-
-class AitServerSerializer(serializers.ModelSerializer):
-
-    class Meta:
-
-        model = Server
-        fields = [
-            'server_name',
-            'server_status', 
-            ]
-        lookup_field = 'server_slug'
-
-class AitProjectAPIRelatedfield(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Project.objects.get(project_name=data)
-
-class AitEnvironmentAPISerializerRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Environment.objects.get(environment_name=data)
-
-class AitServerAPISerializerRelatedfield(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Server.objects.get(server_name=data)
 
 class AitEnvironmentSerializer(serializers.ModelSerializer):
     # environment_project = ProjectSerializer()
     # server  = AitServerAPISerializerRelatedfield(queryset=Server.objects.all(), many=True, source='server_set')
-    server  = AitServerProjectSerializer(many=True, source='server_set')
+    server  = BaseHyperlinkedServer(many=True, source='server_set')
     class Meta:
 
         model = Environment
@@ -337,10 +318,11 @@ class AitEnvironmentSerializer(serializers.ModelSerializer):
 
             ]
         lookup_field = 'environment_slug'
-        depth = 1
+        # depth = 1
         extra_kwargs = {
             'url': {'lookup_field': 'environment_slug'},
         }
+
 class AitProjectSerializer(serializers.HyperlinkedModelSerializer):
     # server = AitServerProjectSerializer(many=True, source='server_set')
     # environment_set = EnvironmentRelatedField(read_only=True)
