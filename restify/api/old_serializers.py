@@ -1,6 +1,6 @@
 from rest_framework import serializers, request
 from rest_framework.reverse import reverse
-from restify.models import Server, Software, Publisher
+from restify.models import Device, Software, Publisher
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin
 
@@ -9,7 +9,7 @@ from django.utils.text import slugify
 
 # # """
 # # Test Code
-# # from servers.api.serializers import PublisherCreateUpdateSerializer
+# # from devices.api.serializers import PublisherCreateUpdateSerializer
 # # serializer = PublisherCreateUpdateSerializer()
 # # print(repr(serializer))
 # # """
@@ -22,7 +22,7 @@ from django.utils.text import slugify
 # class PublisherCreateUpdateSerializer(serializers.ModelSerializer):
 #     """
 #     Test Code
-#     from servers.api.serializers import PublisherCreateUpdateSerializer
+#     from devices.api.serializers import PublisherCreateUpdateSerializer
 #     serializer = PublisherCreateUpdateSerializer()
 #     print(repr(serializer))
 #     """
@@ -47,7 +47,7 @@ from django.utils.text import slugify
 #     url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='slug')
 #     """
 #     Test Code
-#     from servers.api.serializers import PublisherDetailSerializer
+#     from devices.api.serializers import PublisherDetailSerializer
 #     serializer = PublisherDetailSerializer()
 #     print(repr(serializer))
 #     """
@@ -75,7 +75,7 @@ from django.utils.text import slugify
 #     url = serializers.HyperlinkedIdentityField("publisher_detail_api", lookup_field='publisher_slug')
 #     """
 #     Test Code
-#     from servers.api.serializers import PublisherListSerializer
+#     from devices.api.serializers import PublisherListSerializer
 #     serializer = PublisherListSerializer()
 #     print(repr(serializer))
 #     """
@@ -105,7 +105,7 @@ from django.utils.text import slugify
 # class SoftwareCreateUpdateCustomSerializer(serializers.Serializer):
 #     """
 #     Test Code
-#     from servers.api.serializers import SoftwareCreateUpdateCustomSerializer
+#     from devices.api.serializers import SoftwareCreateUpdateCustomSerializer
 #     serializer = SoftwareCreateUpdateCustomSerializer()
 #     print(repr(serializer))
 #     """
@@ -135,7 +135,7 @@ from django.utils.text import slugify
 # class SoftwareCreateUpdateSerializer(serializers.ModelSerializer):
 #     """
 #     Test Code
-#     from servers.api.serializers import SoftwareCreateUpdateSerializer
+#     from devices.api.serializers import SoftwareCreateUpdateSerializer
 #     serializer = SoftwareCreateUpdateSerializer()
 #     print(repr(serializer))
 #     """
@@ -161,7 +161,7 @@ from django.utils.text import slugify
 #     url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='software_slug')
 #     """
 #     Test Code
-#     from servers.api.serializers import SoftwareDetailSerializer
+#     from devices.api.serializers import SoftwareDetailSerializer
 #     serializer = SoftwareDetailSerializer()
 #     print(repr(serializer))
 #     """
@@ -188,7 +188,7 @@ from django.utils.text import slugify
 #     url = serializers.HyperlinkedIdentityField("software_detail_api", lookup_field='software_slug')
 #     """
 #     Test Code
-#     from servers.api.serializers import SoftwareListSerializer
+#     from devices.api.serializers import SoftwareListSerializer
 #     serializer = SoftwareListSerializer()
 #     print(repr(serializer))
 #     """
@@ -212,25 +212,25 @@ from django.utils.text import slugify
 # # End Software ------------------------------------
 
 
-# # Begin Server ------------------------------------
+# # Begin Device ------------------------------------
 
 # # WritableNestedModelSerializer
-# class ServerCreateUpdateSerializer(serializers.ModelSerializer):
+# class DeviceCreateUpdateSerializer(serializers.ModelSerializer):
 #     """
 #     Test Code
-#     from servers.api.serializers import ServerCreateUpdateSerializer
-#     serializer = ServerCreateUpdateSerializer()
+#     from devices.api.serializers import DeviceCreateUpdateSerializer
+#     serializer = DeviceCreateUpdateSerializer()
 #     print(repr(serializer))
 #     """
 
 #     class Meta:
 
-#         model = Server
+#         model = Device
 #         fields = [
 #             'id',
-#             'server_name',
-#             'server_status', 
-#             'server_software', 
+#             'device_name',
+#             'device_status', 
+#             'device_software', 
 #             ]
 #         # lookup_field = 'slug'
 #         # extra_kwargs = {
@@ -240,25 +240,25 @@ from django.utils.text import slugify
 #         # }
 
 
-# class ServerDetailSerializer(serializers.ModelSerializer):
-#     url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='server_slug')
+# class DeviceDetailSerializer(serializers.ModelSerializer):
+#     url = serializers.HyperlinkedIdentityField("device_detail_api", lookup_field='device_slug')
 #     """
 #     Test Code
-#     from servers.api.serializers import ServerDetailSerializer
-#     serializer = ServerDetailSerializer()
+#     from devices.api.serializers import DeviceDetailSerializer
+#     serializer = DeviceDetailSerializer()
 #     print(repr(serializer))
 #     """
 #     class Meta:
 
-#         model = Server
+#         model = Device
 #         fields = [
 #             'url',
 #             'id',
-#             'server_name',
-#             'server_status', 
-#             'server_software', 
+#             'device_name',
+#             'device_status', 
+#             'device_software', 
 #             ]
-#         lookup_field = 'server_slug'
+#         lookup_field = 'device_slug'
 #         # extra_kwargs = {
 #         #     'url': {'lookup_field': 'slug'},
 #         #     # 'name': {'validators': []},
@@ -266,25 +266,25 @@ from django.utils.text import slugify
 #         # }
 #         depth = 1
 
-# class ServerListSerializer(serializers.ModelSerializer):
-#     # url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='server_slug')
+# class DeviceListSerializer(serializers.ModelSerializer):
+#     # url = serializers.HyperlinkedIdentityField("device_detail_api", lookup_field='device_slug')
 #     """
 #     Test Code
-#     from servers.api.serializers import ServerListSerializer
-#     serializer = ServerListSerializer()
+#     from devices.api.serializers import DeviceListSerializer
+#     serializer = DeviceListSerializer()
 #     print(repr(serializer))
 #     """
 #     class Meta:
 
-#         model = Server
+#         model = Device
 #         fields = [
 #             # 'url',
 #             'id',
-#             'server_name',
-#             'server_status', 
-#             'server_software', 
+#             'device_name',
+#             'device_status', 
+#             'device_software', 
 #             ]
-#         lookup_field = 'server_slug'
+#         lookup_field = 'device_slug'
 #         # extra_kwargs = {
 #         #     'url': {'lookup_field': 'slug'},
 #         #     # 'name': {'validators': []},
@@ -300,7 +300,7 @@ from django.utils.text import slugify
 class PublisherSerializer(serializers.ModelSerializer):
     """
     Test Code
-    from servers.api.serializers import PublisherSerializer
+    from devices.api.serializers import PublisherSerializer
     serializer = PublisherSerializer()
     print(repr(serializer))
     """
@@ -324,7 +324,7 @@ class PublisherSerializer(serializers.ModelSerializer):
 # class SoftwarePublisherSerializer(serializers.HyperlinkedModelSerializer):
 #     """
 #     Test Code
-#     from servers.api.serializers import PublisherSerializer
+#     from devices.api.serializers import PublisherSerializer
 #     serializer = PublisherSerializer()
 #     print(repr(serializer))
 #     """
@@ -345,7 +345,7 @@ class PublisherSerializer(serializers.ModelSerializer):
 # class CustomPublisherSerializer(serializers.ModelSerializer):
 #     """
 #     Test Code
-#     from servers.api.serializers import PublisherSerializer
+#     from devices.api.serializers import PublisherSerializer
 #     serializer = PublisherSerializer()
 #     print(repr(serializer))
 #     """
@@ -486,32 +486,32 @@ class SoftwareSerializer(WritableNestedModelSerializer, serializers.ModelSeriali
     #         })
         
 
-# class ServerSerializer(serializers.HyperlinkedModelSerializer):
-class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField("server_detail_api", lookup_field='server_slug')
-# class ServerSerializer(serializers.HyperlinkedModelSerializer):
-    server_software = SoftwareSerializer(many=True)
+# class DeviceSerializer(serializers.HyperlinkedModelSerializer):
+class DeviceSerializer(WritableNestedModelSerializer, serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField("device_detail_api", lookup_field='device_slug')
+# class DeviceSerializer(serializers.HyperlinkedModelSerializer):
+    device_software = SoftwareSerializer(many=True)
     """
     Test Code
-    from servers.api.serializers import ServerSerializer
-    serializer = ServerSerializer()
+    from devices.api.serializers import DeviceSerializer
+    serializer = DeviceSerializer()
     print(repr(serializer))
     """
     class Meta:
 
-        model = Server
+        model = Device
         fields = [
             'url',
             'id',
-            'server_name',
-            'server_status', 
-            'server_software', 
+            'device_name',
+            'device_status', 
+            'device_software', 
             ]
         lookup_field = 'slug'
         extra_kwargs = {
-            'url': {'lookup_field': 'server_slug'},
-            'server_name': {'validators': []},
-            'server_slug': {'validators': []},
+            'url': {'lookup_field': 'device_slug'},
+            'device_name': {'validators': []},
+            'device_slug': {'validators': []},
         }
 
 
@@ -519,13 +519,13 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedMod
     #     print(f'\n\nValidated Data \n\n-----------------------------\n{validated_data}\n-----------------------------')
     #     # publisher_data = software_data['publisher']
     #     # print(f'\n\npublisher_data Data \n\n-----------------------------\n{publisher_data}\n-----------------------------')
-    #     server, created = Server.objects.update_or_create(
-    #         server_name = validated_data.get('server_name', None),
+    #     device, created = Device.objects.update_or_create(
+    #         device_name = validated_data.get('device_name', None),
     #         defaults={
-    #             'server_status': validated_data.get('server_status', None),
+    #             'device_status': validated_data.get('device_status', None),
     #         })
             
-    #     software_data = validated_data.pop('server_software')
+    #     software_data = validated_data.pop('device_software')
     #     # print(f'\n\nsoftware_data Data \n\n{software_data}\n')
     #     for publisher in software_data:
     #         print(f'\nPUBLISHER DATA -----> {publisher}')
@@ -560,16 +560,16 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedMod
     #                 'software_publisher': Publisher.objects.get(publisher_name=software['software_publisher'])
     #                 # 'software_publisher': Publisher.objects.get(publisher_name=publisher_name)
     #             })
-    #         server.server_software.add(software)
+    #         device.device_software.add(software)
     #     # if created == False:
     #     #     print(f'Updated {software.name} name')
     #     # else:
     #     #     print(f'Created {software.name} name')
-    #     return server
+    #     return device
 # # End Software ------------------------------------
 
-# {'server_name': 'Server-002', 'server_status': True, 
-# 'server_software': 
+# {'device_name': 'Device-002', 'device_status': True, 
+# 'device_software': 
 # [OrderedDict([('software_publisher', <Publisher: Python Software Foundation>), ('software_name', 'Python 3a.6.12'), ('software_status', True), ('software_version', '3.6.6')]), 
 # OrderedDict([('software_publisher', <Publisher: Microsoft>), ('software_name', 'IIS Cors Maodule 1.2.3'), ('software_status', True), ('software_version', '1.2.3')])]}
 
@@ -582,14 +582,14 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedMod
 
 #     def create(self, validated_data):
 #         print(f'\n\nValidated Data \n\n-----------------------------\n{validated_data}\n-----------------------------')
-#         software_data = validated_data.pop('server_software')
+#         software_data = validated_data.pop('device_software')
 #         print(f'\n\nsoftware_data Data \n\n-----------------------------\n{software_data}\n-----------------------------')
 #         # publisher_data = software_data['publisher']
 #         # print(f'\n\npublisher_data Data \n\n-----------------------------\n{publisher_data}\n-----------------------------')
-#         server, created = Server.objects.update_or_create(
-#             server_name = validated_data.get('server_name', None),
+#         device, created = Device.objects.update_or_create(
+#             device_name = validated_data.get('device_name', None),
 #             defaults={
-#                 'server_status': validated_data.get('server_status', None),
+#                 'device_status': validated_data.get('device_status', None),
 #             })
             
 #         for publisher in software_data:
@@ -615,15 +615,15 @@ class ServerSerializer(WritableNestedModelSerializer, serializers.HyperlinkedMod
 #                     'software_version': software['software_version'],
 #                     'software_status': software['software_status'],
 #                 })
-#             server.server_software.add(software)
+#             device.device_software.add(software)
 #         # if created == False:
 #         #     print(f'Updated {software.name} name')
 #         # else:
 #         #     print(f'Created {software.name} name')
-#         return server
+#         return device
 # # # End Software ------------------------------------
 
-# # {'server_name': 'Server-002', 'server_status': True, 
-# # 'server_software': 
+# # {'device_name': 'Device-002', 'device_status': True, 
+# # 'device_software': 
 # # [OrderedDict([('software_publisher', <Publisher: Python Software Foundation>), ('software_name', 'Python 3a.6.12'), ('software_status', True), ('software_version', '3.6.6')]), 
 # # OrderedDict([('software_publisher', <Publisher: Microsoft>), ('software_name', 'IIS Cors Maodule 1.2.3'), ('software_status', True), ('software_version', '1.2.3')])]}

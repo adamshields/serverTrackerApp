@@ -7,7 +7,7 @@ from django.utils.text import slugify
 class Ait(models.Model):
     """
     Ait can have many Sub Projects
-    Ait can support Many Servers
+    Ait can support Many Devices
     ait_number must be a number
     """
     ait_number          = models.IntegerField(unique=True, verbose_name='Ait #')
@@ -28,7 +28,7 @@ class Ait(models.Model):
 
 class Project(models.Model):
     """
-    Project can have many Servers
+    Project can have many Devices
     project can have multiple AIT's
     project_ait is a foreign key
     """
@@ -61,7 +61,7 @@ class Environment(models.Model):
     """
     Environment must have a project
     save() method unique slug
-    Multiple servers can be tied to single environment
+    Multiple devices can be tied to single environment
     """
     environment_name            = models.CharField(max_length=200, verbose_name='Environment Name')
     environment_slug            = models.SlugField(unique=True, null=True)
@@ -153,36 +153,36 @@ class Software(models.Model):
 # pre_save.connect(pre_save_software, sender=Software)
 
 
-class Server(models.Model):
+class Device(models.Model):
     """
-    Server can have many software associated
-    Server can be created without software
-    Server can be part of multiple AIT's
-    Server can only be a part of a single project
-    Server can only be part of a single environment
+    Device can have many software associated
+    Device can be created without software
+    Device can be part of multiple AIT's
+    Device can only be a part of a single project
+    Device can only be part of a single environment
     """
     
-    server_name            = models.CharField(max_length=200, unique=True, verbose_name='Server Name')
-    server_slug            = models.SlugField(unique=True, null=True)
-    server_status          = models.BooleanField(default=False, verbose_name='Active')
+    device_name            = models.CharField(max_length=200, unique=True, verbose_name='Device Name')
+    device_slug            = models.SlugField(unique=True, null=True)
+    device_status          = models.BooleanField(default=False, verbose_name='Active')
 
     # ManyToMany
-    server_software        = models.ManyToManyField(Software, blank=True, verbose_name='Server Software')
+    device_software        = models.ManyToManyField(Software, blank=True, verbose_name='Device Software')
 
     # Foreign Relationships
-    server_ait             = models.ForeignKey(Ait, verbose_name='Server AIT', blank=True, null=True, on_delete=models.CASCADE)
-    server_project         = models.ForeignKey(Project, verbose_name='Server Project', blank=True, null=True, on_delete=models.CASCADE)
-    server_environment     = models.ForeignKey(Environment, verbose_name='Server Environment', blank=True, null=True, on_delete=models.CASCADE)
+    device_ait             = models.ForeignKey(Ait, verbose_name='Device AIT', blank=True, null=True, on_delete=models.CASCADE)
+    device_project         = models.ForeignKey(Project, verbose_name='Device Project', blank=True, null=True, on_delete=models.CASCADE)
+    device_environment     = models.ForeignKey(Environment, verbose_name='Device Environment', blank=True, null=True, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = ('Server')
-        verbose_name_plural = ('Servers')
-        ordering = ('id', 'server_name')
+        verbose_name = ('Device')
+        verbose_name_plural = ('Devices')
+        ordering = ('id', 'device_name')
 
     def __str__(self):
-        return self.server_name
+        return self.device_name
 
     def save(self, *args, **kwargs):
-        self.server_slug = slugify(self.server_name)
-        super(Server, self).save(*args, **kwargs)
+        self.device_slug = slugify(self.device_name)
+        super(Device, self).save(*args, **kwargs)
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers, request
 from rest_framework.reverse import reverse
-from restify.models import Server, Software, Publisher, Ait, Project, Environment
+from restify.models import Device, Software, Publisher, Ait, Project, Environment
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin, NestedUpdateMixin
 
@@ -55,7 +55,7 @@ class PublisherAPIRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return Publisher.objects.get(publisher_name=data)
 
-class SoftwareServerAPIRelatedField(serializers.RelatedField):
+class SoftwareDeviceAPIRelatedField(serializers.RelatedField):
     def display_value(self, instance):
         return instance
 
@@ -63,9 +63,9 @@ class SoftwareServerAPIRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Server.objects.get(server_name=data)
+        return Device.objects.get(device_name=data)
 
-class ServerRelatedField(serializers.RelatedField):
+class DeviceRelatedField(serializers.RelatedField):
     def display_value(self, instance):
         return instance
 
@@ -73,7 +73,7 @@ class ServerRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Server.objects.get(server_name=data)
+        return Device.objects.get(device_name=data)
 
 
 class PublisherRelatedField(serializers.RelatedField):
@@ -106,7 +106,7 @@ class AitEnvironmentAPISerializerRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return Environment.objects.get(environment_name=data)
 
-class AitServerAPISerializerRelatedfield(serializers.RelatedField):
+class AitDeviceAPISerializerRelatedfield(serializers.RelatedField):
     def display_value(self, instance):
         return instance
 
@@ -114,29 +114,29 @@ class AitServerAPISerializerRelatedfield(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Server.objects.get(server_name=data)
+        return Device.objects.get(device_name=data)
 
-class BaseHyperlinkedServer(serializers.HyperlinkedModelSerializer):
+class BaseHyperlinkedDevice(serializers.HyperlinkedModelSerializer):
 
     class Meta:
 
-        model = Server
+        model = Device
 
         fields = [
             'url',
-            'server_name',
-            'server_status',
+            'device_name',
+            'device_status',
             ]
         
         extra_kwargs = {
-            'url': {'lookup_field': 'server_slug'},
+            'url': {'lookup_field': 'device_slug'},
         }
 
 
 
 class PublisherSoftwareSerializer(serializers.HyperlinkedModelSerializer):
 
-    server = BaseHyperlinkedServer(many=True, source='server_set')
+    device = BaseHyperlinkedDevice(many=True, source='device_set')
 
     class Meta:
 
@@ -146,7 +146,7 @@ class PublisherSoftwareSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'software_name',
             'software_version',
-            'server',
+            'device',
 
             ]
 
@@ -178,7 +178,7 @@ class PublisherSerializer(serializers.HyperlinkedModelSerializer):
 class SoftwareAPISerializer(serializers.HyperlinkedModelSerializer):
 
     software_publisher = PublisherAPIRelatedField(queryset=Publisher.objects.all(), many=False)
-    server = BaseHyperlinkedServer(many=True, source='server_set')
+    device = BaseHyperlinkedDevice(many=True, source='device_set')
 
     class Meta:
 
@@ -189,7 +189,7 @@ class SoftwareAPISerializer(serializers.HyperlinkedModelSerializer):
             'software_publisher',
             'software_name',
             'software_version',
-            'server',
+            'device',
             ]
 
         extra_kwargs = {
@@ -218,36 +218,36 @@ class SoftwareSerializer(serializers.ModelSerializer):
         }
 
         
-class ServerSerializer(serializers.HyperlinkedModelSerializer):
+class DeviceSerializer(serializers.HyperlinkedModelSerializer):
 
-    server_ait          = AitRelatedField(queryset=Ait.objects.all())
-    server_project      = ProjectRelatedField(queryset=Project.objects.all())
-    server_environment  = EnvironmentRelatedField(queryset=Environment.objects.all())
-    server_software     = SoftwareSerializer(many=True)
+    device_ait          = AitRelatedField(queryset=Ait.objects.all())
+    device_project      = ProjectRelatedField(queryset=Project.objects.all())
+    device_environment  = EnvironmentRelatedField(queryset=Environment.objects.all())
+    device_software     = SoftwareSerializer(many=True)
 
     class Meta:
 
-        model = Server
+        model = Device
 
         fields = [
             'url',
-            'server_name',
-            'server_status', 
-            'server_ait',
-            'server_project',
-            'server_environment',
-            'server_software', 
+            'device_name',
+            'device_status', 
+            'device_ait',
+            'device_project',
+            'device_environment',
+            'device_software', 
             ]
 
         extra_kwargs = {
-            'url': {'lookup_field': 'server_slug'},
+            'url': {'lookup_field': 'device_slug'},
         }
 
 
 class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
 
     environment_project      = ProjectRelatedField(queryset=Project.objects.all())
-    environment_servers      = BaseHyperlinkedServer(many=True, source='server_set')
+    environment_devices      = BaseHyperlinkedDevice(many=True, source='device_set')
 
     class Meta:
 
@@ -257,7 +257,7 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'environment_name',
             'environment_project',
-            'environment_servers',
+            'environment_devices',
             ]
 
         extra_kwargs = {
@@ -267,7 +267,7 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProjectEnvironmentSerializer(serializers.HyperlinkedModelSerializer):
 
-    environment_servers      = BaseHyperlinkedServer(many=True, source='server_set')
+    environment_devices      = BaseHyperlinkedDevice(many=True, source='device_set')
     
     class Meta:
 
@@ -276,7 +276,7 @@ class ProjectEnvironmentSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'url',
             'environment_name',
-            'environment_servers',
+            'environment_devices',
             ]
 
         extra_kwargs = {
@@ -307,7 +307,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class AitEnvironmentSerializer(serializers.ModelSerializer):
 
-    server  = BaseHyperlinkedServer(many=True, source='server_set')
+    device  = BaseHyperlinkedDevice(many=True, source='device_set')
     
     class Meta:
 
@@ -315,7 +315,7 @@ class AitEnvironmentSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'environment_name',
-            'server',
+            'device',
             ]
 
         extra_kwargs = {

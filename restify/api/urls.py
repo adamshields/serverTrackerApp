@@ -2,7 +2,7 @@ from rest_framework import routers
 from .views import (
     PublisherViewSet,
     SoftwareViewSet,
-    ServerViewSet,
+    DeviceViewSet,
     AitViewSet,
     ProjectViewSet,
     EnvironmentViewSet
@@ -17,7 +17,7 @@ from django.urls import path, include
 router = routers.DefaultRouter()
 router.register(r"publishers", PublisherViewSet)
 router.register(r"software", SoftwareViewSet)
-router.register(r"servers", ServerViewSet)
+router.register(r"devices", DeviceViewSet)
 router.register(r"aits", AitViewSet)
 router.register(r"projects", ProjectViewSet)
 router.register(r"environments", EnvironmentViewSet)

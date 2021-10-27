@@ -20,13 +20,13 @@ spec:
         - containerPort: 80
         env:
         - name: DATABASE_HOST
-          value: "server683692875.postgres.database.azure.com"
+          value: "device683692875.postgres.database.azure.com"
         - name: DATABASE_USERNAME
           value: "sinfulgull7"
         - name: DATABASE_PASSWORD
           value: "JhfdzqHycuxei1rFibSR6Q"
         - name: DATABASE_NAME
-          value: "flexibleserverdb"
+          value: "flexibledevicedb"
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

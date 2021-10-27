@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Server, Publisher, Software, Project, Environment, Ait
+from .models import Device, Publisher, Software, Project, Environment, Ait
 
 # admin.site.register(Project)
 # admin.site.register(Environment)
@@ -117,38 +117,38 @@ class SoftwareAdmin(admin.ModelAdmin):
 
 admin.site.register(Software, SoftwareAdmin)
 
-class ServerAdmin(admin.ModelAdmin):
+class DeviceAdmin(admin.ModelAdmin):
 
     list_filter = [
         'id',
-        'server_name',
-        'server_ait',
-        'server_project',
-        'server_environment',
+        'device_name',
+        'device_ait',
+        'device_project',
+        'device_environment',
 		]
 
     list_display = [
         'id',
-        'server_name',
-        'server_ait',
-        'server_project',
-        'server_environment',
+        'device_name',
+        'device_ait',
+        'device_project',
+        'device_environment',
 		]
         
     list_display_links = [
         'id',
-        'server_name',
-        'server_ait',
-        'server_project',
-        'server_environment',
+        'device_name',
+        'device_ait',
+        'device_project',
+        'device_environment',
         ]
 
-    readonly_fields = ['server_slug']
+    readonly_fields = ['device_slug']
 
     class Meta:
-        model = Server
+        model = Device
 
-admin.site.register(Server, ServerAdmin)
+admin.site.register(Device, DeviceAdmin)
 
 
 class PublisherAdminAdmin(admin.ModelAdmin):

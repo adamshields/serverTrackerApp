@@ -1,4 +1,4 @@
-from restify.models import Publisher, Software, Server
+from restify.models import Publisher, Software, Device
 from .serializers import (
     # PublisherCreateUpdateSerializer,
     # PublisherDetailSerializer,
@@ -8,10 +8,10 @@ from .serializers import (
     # SoftwareListSerializer,
     PublisherSerializer,
     SoftwareSerializer,
-    ServerSerializer,
-    # ServerCreateUpdateSerializer,
-    # ServerDetailSerializer,
-    # ServerListSerializer,
+    DeviceSerializer,
+    # DeviceCreateUpdateSerializer,
+    # DeviceDetailSerializer,
+    # DeviceListSerializer,
 )
 from rest_framework import viewsets
 from rest_framework.generics import (
@@ -49,17 +49,17 @@ class SoftwareViewSet(viewsets.ModelViewSet):
     lookup_field = 'software_slug'
 
 
-class ServerViewSet(viewsets.ModelViewSet):
+class DeviceViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
 
-    ServerViewSet
+    DeviceViewSet
     """
 
-    queryset = Server.objects.all()
-    serializer_class = ServerSerializer
-    lookup_field = 'server_slug'
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+    lookup_field = 'device_slug'
 
 
 # End ViewSets ------------------------------------
@@ -71,10 +71,10 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
 # @api_view(["GET"])
-# def server_software_publisher_api_home(request, format=None):
+# def device_software_publisher_api_home(request, format=None):
 #     return Response(
 #         {
-#             "servers": reverse("server_list_api", request=request, format=format),
+#             "devices": reverse("device_list_api", request=request, format=format),
 #             "software": reverse("software_list_api", request=request, format=format),
 #             "publisher": reverse("publisher_list_api", request=request, format=format),
 #         }
@@ -116,32 +116,32 @@ class ServerViewSet(viewsets.ModelViewSet):
 #     lookup_field = 'software_slug'
 
 
-# class ServerCreateAPIView(CreateAPIView):
-#     queryset = Server.objects.all()
-#     serializer_class = ServerCreateUpdateSerializer
+# class DeviceCreateAPIView(CreateAPIView):
+#     queryset = Device.objects.all()
+#     serializer_class = DeviceCreateUpdateSerializer
 
 
-# class ServerDetailAPIView(RetrieveAPIView):
-#     queryset = Server.objects.all()
-#     serializer_class = ServerDetailSerializer
-#     lookup_field = 'server_slug'
+# class DeviceDetailAPIView(RetrieveAPIView):
+#     queryset = Device.objects.all()
+#     serializer_class = DeviceDetailSerializer
+#     lookup_field = 'device_slug'
 
 
-# class ServerListAPIView(ListAPIView):
-#     queryset = Server.objects.all()
-#     serializer_class = ServerListSerializer
-#     lookup_field = 'server_slug'
+# class DeviceListAPIView(ListAPIView):
+#     queryset = Device.objects.all()
+#     serializer_class = DeviceListSerializer
+#     lookup_field = 'device_slug'
 
 # # End API Views ------------------------------------
 
 
-from restify.models import Publisher, Software, Server
+from restify.models import Publisher, Software, Device
 from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import (
     PublisherSerializer,
     SoftwareSerializer,
-    ServerSerializer,
+    DeviceSerializer,
 )
 from rest_framework import viewsets
 
@@ -174,17 +174,17 @@ class SoftwareViewSet(viewsets.ModelViewSet):
     lookup_field = 'software_slug'
 
 
-class ServerViewSet(viewsets.ModelViewSet):
+class DeviceViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
 
-    ServerViewSet
+    DeviceViewSet
     """
 
-    queryset = Server.objects.all()
-    serializer_class = ServerSerializer
-    lookup_field = 'server_slug'
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+    lookup_field = 'device_slug'
 
 
     def create(self, request, *args, **kwargs):
@@ -192,13 +192,13 @@ class ServerViewSet(viewsets.ModelViewSet):
         data = request.data
         print(data)
 
-        server, created = Server.objects.update_or_create(
-            server_name = data['server_name'],
+        device, created = Device.objects.update_or_create(
+            device_name = data['device_name'],
             defaults = {
-                'server_status': data['server_status']
+                'device_status': data['device_status']
             }
         )
-        software_data = data['server_software']
+        software_data = data['device_software']
 
         for publisher in software_data:
             publisher, created = Publisher.objects.update_or_create(
@@ -216,14 +216,14 @@ class ServerViewSet(viewsets.ModelViewSet):
                 software_publisher = Publisher.objects.get(publisher_name=software['software_publisher'])
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
-            server.server_software.add(software)
-        serializer = ServerSerializer(server)
+            device.device_software.add(software)
+        serializer = DeviceSerializer(device)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     # def partial_update(self, request, *args, **kwargs):
     #     print(f'This is request.data on partial update:\n {request.data}')
-    #     serialized = ServerSerializer(data=request.data, partial=True)
+    #     serialized = DeviceSerializer(data=request.data, partial=True)
     #     print(f'\n Running Partial Update \n')
     #     if serialized.is_valid():
     #     # if serialized.is_valid(raise_exception=True):
@@ -234,13 +234,13 @@ class ServerViewSet(viewsets.ModelViewSet):
         data = request.data
         print(data)
 
-        server, created = Server.objects.update_or_create(
-            server_name = data['server_name'],
+        device, created = Device.objects.update_or_create(
+            device_name = data['device_name'],
             defaults = {
-                'server_status': data['server_status']
+                'device_status': data['device_status']
             }
         )
-        software_data = data['server_software']
+        software_data = data['device_software']
         try:
         # try something
             for publisher in software_data:
@@ -274,10 +274,10 @@ class ServerViewSet(viewsets.ModelViewSet):
                 software_publisher = Publisher.objects.get(publisher_name=software['software_publisher'])
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
-            server.server_software.add(software)
+            device.device_software.add(software)
 
 
-        serializer = ServerSerializer(server)
+        serializer = DeviceSerializer(device)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
@@ -290,13 +290,13 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
 
-from restify.models import Publisher, Software, Server
+from restify.models import Publisher, Software, Device
 from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import (
     PublisherSerializer,
     SoftwareSerializer,
-    ServerSerializer,
+    DeviceSerializer,
 )
 from rest_framework import viewsets
 
@@ -329,17 +329,17 @@ class SoftwareViewSet(viewsets.ModelViewSet):
     lookup_field = 'software_slug'
 
 
-class ServerViewSet(viewsets.ModelViewSet):
+class DeviceViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
 
-    ServerViewSet
+    DeviceViewSet
     """
 
-    queryset = Server.objects.all()
-    serializer_class = ServerSerializer
-    lookup_field = 'server_slug'
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+    lookup_field = 'device_slug'
 
 
     def create(self, request, *args, **kwargs):
@@ -347,13 +347,13 @@ class ServerViewSet(viewsets.ModelViewSet):
         data = request.data
         print(data)
 
-        server, created = Server.objects.update_or_create(
-            server_name = data['server_name'],
+        device, created = Device.objects.update_or_create(
+            device_name = data['device_name'],
             defaults = {
-                'server_status': data['server_status']
+                'device_status': data['device_status']
             }
         )
-        software_data = data['server_software']
+        software_data = data['device_software']
 
         for publisher in software_data:
             publisher, created = Publisher.objects.update_or_create(
@@ -371,14 +371,14 @@ class ServerViewSet(viewsets.ModelViewSet):
                 software_publisher = Publisher.objects.get(publisher_name=software['software_publisher'])
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
-            server.server_software.add(software)
-        serializer = ServerSerializer(server)
+            device.device_software.add(software)
+        serializer = DeviceSerializer(device)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     # def partial_update(self, request, *args, **kwargs):
     #     print(f'This is request.data on partial update:\n {request.data}')
-    #     serialized = ServerSerializer(data=request.data, partial=True)
+    #     serialized = DeviceSerializer(data=request.data, partial=True)
     #     print(f'\n Running Partial Update \n')
     #     if serialized.is_valid():
     #     # if serialized.is_valid(raise_exception=True):
@@ -389,13 +389,13 @@ class ServerViewSet(viewsets.ModelViewSet):
         
         data = request.data
         
-        server, created = Server.objects.update_or_create(
-            server_name = data['server_name'],
+        device, created = Device.objects.update_or_create(
+            device_name = data['device_name'],
             defaults = {
-                'server_status': data['server_status']
+                'device_status': data['device_status']
             }
         )
-        software_data = data['server_software']
+        software_data = data['device_software']
         # publisher_list = []
         for publisher in software_data:
             print(f'\nCreating New Publisher {publisher}')
@@ -440,15 +440,15 @@ class ServerViewSet(viewsets.ModelViewSet):
             print(f'\n{software.software_publisher.id} | {software.software_publisher} | {software.software_name} | {software.software_version} ')
             # publisher_list.append(software.software_publisher.id)
             # print(publisher_list)
-            server.server_software.add(software)
+            device.device_software.add(software)
 
-        # print(f'\nSERVER_NAME {server.server_name}')
-        # print(f'\nSERVER_STATUS {server.server_status}')
+        # print(f'\ndevice_name {device.device_name}')
+        # print(f'\ndevice_STATUS {device.device_status}')
         # print(f'\nSOFTWARE_DATA {software.software_publisher} | {software.software_name} | {software.software_version}')
         # print(f'\nSOFTWARE {software}')
-        # print(f'\nSERVER_STATUS {server.server_software}')
-        # server.save()
+        # print(f'\ndevice_STATUS {device.device_software}')
+        # device.save()
         # software.save()
-        serializer = ServerSerializer(server)
+        serializer = DeviceSerializer(device)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)

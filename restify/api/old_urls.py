@@ -2,19 +2,19 @@ from rest_framework import routers
 from .views import (
     PublisherViewSet,
     SoftwareViewSet,
-    ServerViewSet,
-    # ServerListAPIView,
-    # ServerCreateAPIView,
-    # ServerDetailAPIView,
-    # # ServerUpdateAPIView,
+    DeviceViewSet,
+    # DeviceListAPIView,
+    # DeviceCreateAPIView,
+    # DeviceDetailAPIView,
+    # # DeviceUpdateAPIView,
     # SoftwareListAPIView,
     # SoftwareCreateAPIView,
     # SoftwareDetailAPIView,
     # PublisherListAPIView,
     # PublisherCreateAPIView,
     # PublisherDetailAPIView,
-    # server_software_publisher_api_home,
-    # ServerAdamViewSet
+    # device_software_publisher_api_home,
+    # DeviceAdamViewSet
 )
 from rest_framework import renderers
 from django.urls import path, include
@@ -26,19 +26,19 @@ from django.urls import path, include
 router = routers.DefaultRouter()
 router.register(r"publishers", PublisherViewSet)
 router.register(r"software", SoftwareViewSet)
-router.register(r"servers", ServerViewSet)
-# router.register(r"serveradam", ServerAdamViewSet)
+router.register(r"devices", DeviceViewSet)
+# router.register(r"deviceadam", DeviceAdamViewSet)
 
 
 urlpatterns = [
     path("api3/", include(router.urls)),
-    # path('', server_software_publisher_api_home),
-    # # Server
-    # path("server/", ServerListAPIView.as_view(), name="server_list_api"),
-    # path("server/create/", ServerCreateAPIView.as_view(), name="server_create_api"),
-    # path("server/<slug:server_slug>/", ServerDetailAPIView.as_view(), name="server_detail_api"),
-    # # path("server/<slug:server_slug>/update/", ServerUpdateAPIView.as_view(), name="server_update_api"),
-    # # path("server/<slug:server_slug>/", ServerDetailAPIView.as_view(), name="server_detail_api"),
+    # path('', device_software_publisher_api_home),
+    # # Device
+    # path("device/", DeviceListAPIView.as_view(), name="device_list_api"),
+    # path("device/create/", DeviceCreateAPIView.as_view(), name="device_create_api"),
+    # path("device/<slug:device_slug>/", DeviceDetailAPIView.as_view(), name="device_detail_api"),
+    # # path("device/<slug:device_slug>/update/", DeviceUpdateAPIView.as_view(), name="device_update_api"),
+    # # path("device/<slug:device_slug>/", DeviceDetailAPIView.as_view(), name="device_detail_api"),
     # # Software
     # path("software/", SoftwareListAPIView.as_view(), name="software_list_api"),
     # path("software/create/", SoftwareCreateAPIView.as_view(), name="software_create_api"),

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from servers.api.views import 
+# from devices.api.views import 
 from .views import IndexTemplateView
 
 admin.site.site_header ='Mothership'

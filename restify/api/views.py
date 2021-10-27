@@ -1,4 +1,4 @@
-from restify.models import Publisher, Software, Server, Ait, Project, Environment
+from restify.models import Publisher, Software, Device, Ait, Project, Environment
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
 from django_filters.rest_framework import DjangoFilterBackend
@@ -8,7 +8,7 @@ from .serializers import (
     PublisherSerializer,
     SoftwareSerializer,
     SoftwareAPISerializer,
-    ServerSerializer,
+    DeviceSerializer,
     AitSerializer, 
     ProjectSerializer, 
     EnvironmentSerializer
@@ -81,16 +81,16 @@ class SoftwareViewSet(viewsets.ModelViewSet):
     serializer_class = SoftwareAPISerializer
     lookup_field = 'software_slug'
 
-class ServerViewSet(viewsets.ModelViewSet):
+class DeviceViewSet(viewsets.ModelViewSet):
     """
-    ServerViewSet
+    DeviceViewSet
     """
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['server_ait__ait_number', 'server_project__project_name', 'server_environment__environment_name', 'server_software__software_name']
+    filterset_fields = ['device_ait__ait_number', 'device_project__project_name', 'device_environment__environment_name', 'device_software__software_name']
 
-    queryset = Server.objects.all()
-    serializer_class = ServerSerializer
-    lookup_field = 'server_slug'
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+    lookup_field = 'device_slug'
     
 
 
@@ -99,7 +99,7 @@ class ServerViewSet(viewsets.ModelViewSet):
         data = request.data
 
         ait, created = Ait.objects.update_or_create(
-            ait_number = data['server_ait']
+            ait_number = data['device_ait']
         )
         if created == False:
             print(f'\nUpdated AIT: {ait.ait_number}')
@@ -108,7 +108,7 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
         project, created = Project.objects.update_or_create(
-            project_name = data['server_project'],
+            project_name = data['device_project'],
             project_ait = Ait.objects.get(ait_number=ait.ait_number)
         )
         if created == False:
@@ -118,9 +118,9 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
         environment, created = Environment.objects.update_or_create(
-            environment_name = data['server_environment'],
+            environment_name = data['device_environment'],
             environment_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
-            # environment_slug = slugify(data['server_environment'] + '-' + slugify(project.project_name)),
+            # environment_slug = slugify(data['device_environment'] + '-' + slugify(project.project_name)),
             
         )
         # environment.environment_project.add(project)
@@ -130,19 +130,19 @@ class ServerViewSet(viewsets.ModelViewSet):
             print(f'\nCreated Environment: {environment.environment_name} | {environment.environment_project} | {environment.environment_slug}')
 
 
-        server, created = Server.objects.update_or_create(
-            server_name = data['server_name'],
-            # server_ait = Ait.objects.get(ait_number=ait.ait_number),
-            # server_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
-            # server_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
+        device, created = Device.objects.update_or_create(
+            device_name = data['device_name'],
+            # device_ait = Ait.objects.get(ait_number=ait.ait_number),
+            # device_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+            # device_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             defaults = {
-                'server_status': data['server_status'],
-                'server_ait': Ait.objects.get(ait_number=ait.ait_number),
-                'server_project': Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
-                'server_environment': Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
+                'device_status': data['device_status'],
+                'device_ait': Ait.objects.get(ait_number=ait.ait_number),
+                'device_project': Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+                'device_environment': Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             }
         )
-        software_data = data['server_software']
+        software_data = data['device_software']
 
         for publisher in software_data:
 
@@ -172,9 +172,9 @@ class ServerViewSet(viewsets.ModelViewSet):
                 software_publisher = Publisher.objects.get(publisher_name=publisher_name)
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
-            server.server_software.add(software)
+            device.device_software.add(software)
 
-        serializer = ServerSerializer(server, context={'request': request})
+        serializer = DeviceSerializer(device, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -184,7 +184,7 @@ class ServerViewSet(viewsets.ModelViewSet):
         data = request.data
         
         ait, created = Ait.objects.update_or_create(
-            ait_number = data['server_ait']
+            ait_number = data['device_ait']
         )
         if created == False:
             print(f'\nUpdated AIT: {ait.ait_number}')
@@ -193,7 +193,7 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
         project, created = Project.objects.update_or_create(
-            project_name = data['server_project'],
+            project_name = data['device_project'],
             project_ait = Ait.objects.get(ait_number=ait.ait_number)
         )
         if created == False:
@@ -203,9 +203,9 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
         environment, created = Environment.objects.update_or_create(
-            environment_name = data['server_environment'],
+            environment_name = data['device_environment'],
             environment_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
-            # environment_slug = slugify(data['server_environment'] + '-' + slugify(project.project_name)),
+            # environment_slug = slugify(data['device_environment'] + '-' + slugify(project.project_name)),
             
         )
         # environment.environment_project.add(project)
@@ -215,20 +215,20 @@ class ServerViewSet(viewsets.ModelViewSet):
             print(f'\nCreated Environment: {environment.environment_name} | {environment.environment_project} | {environment.environment_slug}')
 
 
-        server, created = Server.objects.update_or_create(
-            server_name = data['server_name'],
-            # server_ait = Ait.objects.get(ait_number=ait.ait_number),
-            # server_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
-            # server_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
+        device, created = Device.objects.update_or_create(
+            device_name = data['device_name'],
+            # device_ait = Ait.objects.get(ait_number=ait.ait_number),
+            # device_project = Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+            # device_environment = Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             defaults = {
-                'server_status': data['server_status'],
-                'server_ait': Ait.objects.get(ait_number=ait.ait_number),
-                'server_project': Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
-                'server_environment': Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
+                'device_status': data['device_status'],
+                'device_ait': Ait.objects.get(ait_number=ait.ait_number),
+                'device_project': Project.objects.get(project_name=project.project_name, project_slug=project.project_slug),
+                'device_environment': Environment.objects.get(environment_name=environment.environment_name, environment_project=environment.environment_project),
             }
         )
-        server.server_software.clear()
-        software_data = data['server_software']
+        device.device_software.clear()
+        software_data = data['device_software']
 
         for publisher in software_data:
 
@@ -258,10 +258,10 @@ class ServerViewSet(viewsets.ModelViewSet):
                 software_publisher = Publisher.objects.get(publisher_name=publisher_name)
             )
             print(f'\n{software.software_publisher} | {software.software_name} | {software.software_version} ')
-            server.server_software.add(software)
-        serializer = ServerSerializer(server)
+            device.device_software.add(software)
+        serializer = DeviceSerializer(device)
 
-        serializer = ServerSerializer(server, context={'request': request})
+        serializer = DeviceSerializer(device, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
@@ -269,16 +269,16 @@ class ServerViewSet(viewsets.ModelViewSet):
         
     #     data = request.data
         
-    #     server, created = Server.objects.update_or_create(
-    #         server_name = data['server_name'],
+    #     device, created = Device.objects.update_or_create(
+    #         device_name = data['device_name'],
     #         defaults = {
-    #             'server_status': data['server_status']
+    #             'device_status': data['device_status']
     #         }
     #     )
 
-    #     server.server_software.clear()
+    #     device.device_software.clear()
         
-    #     software_data = data['server_software']
+    #     software_data = data['device_software']
         
     #     for publisher in software_data:
     #         publisher_name = publisher['software_publisher']
@@ -311,12 +311,12 @@ class ServerViewSet(viewsets.ModelViewSet):
     #         else:
     #             print(f'\nExisting Software: {software.software_publisher.id} | {software.software_publisher} | {software.software_name} | {software.software_version} ')
             
-    #         # software_list.append(server.server_software.software_name)
-    #         # server.server_software.add(software_list)
+    #         # software_list.append(device.device_software.software_name)
+    #         # device.device_software.add(software_list)
             
-    #         server.server_software.add(software)
+    #         device.device_software.add(software)
     #         # print(publisher_list)
 
-    #     serializer = ServerSerializer(server)
+    #     serializer = DeviceSerializer(device)
     #     headers = self.get_success_headers(serializer.data)
     #     return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)

@@ -1,6 +1,6 @@
 from rest_framework import serializers, request
 from rest_framework.reverse import reverse
-from restify.models import Server, Software, Publisher, Ait, Project, Environment
+from restify.models import Device, Software, Publisher, Ait, Project, Environment
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin, NestedUpdateMixin
 
@@ -81,23 +81,23 @@ class EnvironmentRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return Environment.objects.get(environment_project=data)
 
-class ServerSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    server_ait          = AitRelatedField(queryset=Ait.objects.all())
-    server_project      = ProjectRelatedField(queryset=Project.objects.all())
-    server_environment  = ProjectRelatedField(queryset=Environment.objects.all())
-    server_software     = SoftwareSerializer(many=True)
+class DeviceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    device_ait          = AitRelatedField(queryset=Ait.objects.all())
+    device_project      = ProjectRelatedField(queryset=Project.objects.all())
+    device_environment  = ProjectRelatedField(queryset=Environment.objects.all())
+    device_software     = SoftwareSerializer(many=True)
     class Meta:
 
-        model = Server
+        model = Device
         fields = [
-            'server_name',
-            'server_status', 
-            'server_ait',
-            'server_project',
-            'server_environment',
-            'server_software', 
+            'device_name',
+            'device_status', 
+            'device_ait',
+            'device_project',
+            'device_environment',
+            'device_software', 
             ]
-        lookup_field = 'server_slug'
+        lookup_field = 'device_slug'
 
 
 
@@ -151,37 +151,37 @@ class EnvironmentSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'url': {'lookup_field': 'environment_slug'},
         }
-class AitServerProjectSerializer(serializers.HyperlinkedModelSerializer):
+class AitDeviceProjectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
 
-        model = Server
+        model = Device
         fields = [
             'url',
             # 'id',
-            'server_name',
+            'device_name',
             # 'project_ait',
-            # 'server_set',
+            # 'device_set',
 
             ]
-        lookup_field = 'server_slug'
+        lookup_field = 'device_slug'
         extra_kwargs = {
-            'url': {'lookup_field': 'server_slug'},
+            'url': {'lookup_field': 'device_slug'},
         }
 
-class AitServerSerializer(serializers.ModelSerializer):
+class AitDeviceSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = Server
+        model = Device
         fields = [
-            'server_name',
-            'server_status', 
+            'device_name',
+            'device_status', 
             ]
-        lookup_field = 'server_slug'
+        lookup_field = 'device_slug'
 
 class AitProjectSerializer(serializers.ModelSerializer):
-    server_set = AitServerProjectSerializer(many=True)
+    device_set = AitDeviceProjectSerializer(many=True)
     # environment_set = EnvironmentRelatedField(read_only=True)
     # environment_set  = ProjectRelatedField(queryset=Environment.objects.all(), many=True)
     # location = serializers.SerializerMethodField('get_alternate_name')
@@ -198,7 +198,7 @@ class AitProjectSerializer(serializers.ModelSerializer):
             'project_environments',
             
             # 'environment_set',
-            'server_set',
+            'device_set',
 
             ]
         lookup_field = 'project_slug'
@@ -220,7 +220,7 @@ class AitProjectSerializer(serializers.ModelSerializer):
 
 class AitSerializer(serializers.HyperlinkedModelSerializer):
     project_set = AitProjectSerializer(many=True)
-    # server_set = AitServerSerializer(many=True)
+    # device_set = AitDeviceSerializer(many=True)
     class Meta:
 
         model = Ait
@@ -230,7 +230,7 @@ class AitSerializer(serializers.HyperlinkedModelSerializer):
             'ait_number',
             # 'project_environments',
             'project_set',
-            # 'server_set',
+            # 'device_set',
 
             ]
         lookup_field = 'ait_slug'
