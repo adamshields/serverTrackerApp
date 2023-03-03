@@ -1,3 +1,3 @@
-create user dbadmin identified BY '12345';
-grant all on mothership.* to 'dbadmin'@'%';
+create user serverdbadmin identified BY '12345';
+grant all on serverdb.* to 'serverdbadmin'@'%';
 flush privileges;
