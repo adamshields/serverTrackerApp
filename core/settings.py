@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'polymorphic',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,9 +43,12 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'crispy_forms',
     'django_filters',
+    'reversion',
     'restify.apps.RestifyConfig',
+    'funkify.apps.FunkifyConfig',
+    'funkifymorphic.apps.FunkifymorphicConfig',
     # 'rufus.apps.RufusConfig',
-    'design.apps.DesignConfig',
+    # 'design.apps.DesignConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,13 +85,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# SQLite DB Config
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# # SQLite DB Config
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # DATABASES={
 #    'default':{
 #       'ENGINE':'django.db.backends.postgresql_psycopg2',
@@ -99,20 +103,20 @@ DATABASES = {
 #       'OPTIONS': {'sslmode': 'require'}
 #    }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'mothership',
-#         'USER': 'dbadmin',
-#         'PASSWORD': '12345',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#         "OPTIONS": {
-#             # Tell MySQLdb to connect with 'utf8mb4' character set
-#             "charset": "utf8mb4",
-#         },
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mothership',
+        'USER': 'dbadmin',
+        'PASSWORD': '12345',
+        'HOST': 'localhost',
+        'PORT': '3307',
+        "OPTIONS": {
+            # Tell MySQLdb to connect with 'utf8mb4' character set
+            "charset": "utf8mb4",
+        },
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
